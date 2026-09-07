@@ -20,19 +20,37 @@ Realizzato in HTML/CSS/JS puro (nessun build step, nessuna dipendenza) e hostato
 ## Struttura
 
 ```
-index.html              markup e contenuti (testi italiani inline come fallback)
-css/style.css           design token, layout, responsive, tema chiaro/scuro
-js/main.js              dizionario i18n, tema, nav mobile, scrollspy, reveal
-CV.pdf                  curriculum scaricabile
-foto_profilo.jpeg       foto della sezione hero
-campione_grandioso.png  stemma Clash Royale
-CNAME                   dominio personalizzato
+index.html                     markup e contenuti (testi italiani inline come fallback)
+css/style.css                  design token, layout, responsive, tema chiaro/scuro
+js/main.js                     dizionario i18n, tema, nav mobile, scrollspy, mappa
+js/travels.js                  ← i paesi visitati e quelli in cui hai vissuto
+js/world-map-data.js           confini nazionali (generato, non si tocca)
+imgs_and_docs/CV.pdf           curriculum scaricabile
+imgs_and_docs/foto_profilo.jpeg
+imgs_and_docs/campione_grandioso.png
+imgs_and_docs/pesce_foto.jpeg
+imgs_and_docs/tatuaggio.jpeg
+imgs_and_docs/shrek2.jpg       locandina del film preferito
+CNAME                          dominio personalizzato
 ```
+
+Tutti gli asset (immagini e PDF) stanno in `imgs_and_docs/`.
 
 ## Sviluppo
 
 Nessuna build richiesta: aprire `index.html` nel browser, oppure servire la cartella con un
 server statico (es. `python3 -m http.server` o `npx serve`).
+
+### Aggiornare la mappa dei viaggi
+
+Apri `js/travels.js` e aggiungi il codice ISO 3166-1 alpha-2 del paese (due lettere) nella
+lista `lived` o `visited`. Salva, ricarica: nient'altro. Il file contiene già l'elenco dei
+codici più comuni come promemoria.
+
+I confini vengono da `js/world-map-data.js`, generato da
+[Natural Earth](https://www.naturalearthdata.com/) 1:110m (pubblico dominio) e disegnato in
+proiezione di Robinson direttamente in SVG — nessuna libreria, nessuna chiamata di rete.
+Quel file non va modificato a mano.
 
 ### Modificare i testi
 

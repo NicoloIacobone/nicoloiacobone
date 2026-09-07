@@ -134,6 +134,27 @@
       'contact.cv': 'Curriculum',
       'contact.cvValue': 'Scarica il CV (PDF)',
 
+      'beyond.c2Stats': 'Statistiche su RoyaleAPI',
+      'beyond.c2Open': 'Apri in Clash Royale',
+      'beyond.c4Title': 'Film preferito: Shrek 2',
+      'beyond.c4Body': 'Non il primo: il secondo. Ci sono discussioni che non sono disposto ad avere. Il sequel migliora tutto quello che c\u2019era prima, regala al mondo il Gatto con gli Stivali e ha una colonna sonora che regge dopo vent\u2019anni. Se serve un argomento per rompere il ghiaccio, questo funziona sempre.',
+      'beyond.c4Alt': 'Locandina del film Shrek 2',
+      'beyond.c5Title': 'Pesca (con conseguenze permanenti)',
+      'beyond.c5Body': 'Alzarsi prima dell\u2019alba per stare fermo su uno scoglio ad aspettare: dopo mesi passati a fissare curve di training, \u00e8 terapia. Il mio primo pesce mi \u00e8 piaciuto al punto che me lo sono fatto tatuare sull\u2019avambraccio. Mia nonna ha commentato che \u00absembra un ricamo\u00bb, e da allora non riesco pi\u00f9 a vederlo diversamente.',
+      'beyond.c5Alt1': 'Il mio primo pesce, tenuto in mano davanti al mare al tramonto',
+      'beyond.c5Alt2': 'Tatuaggio a linee sottili dello stesso pesce, sull\u2019avambraccio',
+      'beyond.c5Cap1': 'Il primo.',
+      'beyond.c5Cap2': 'E la sua versione permanente.',
+
+      'map.subhead': 'Dove sono stato',
+      'map.lived': 'Ci ho vissuto',
+      'map.visited': 'Visitati',
+      'map.note': 'Passa sopra un paese \u2014 o toccalo \u2014 per vederne il nome.',
+      'map.source': 'Confini: Natural Earth (pubblico dominio).',
+      'map.fallback': 'La mappa richiede JavaScript per essere disegnata.',
+      'map.tipLived': 'ci ho vissuto',
+      'map.tipVisited': 'visitato',
+
       'footer.note': 'Costruito a mano in HTML, CSS e JavaScript. Nessun framework è stato maltrattato.',
       'footer.top': 'Torna su ↑'
     },
@@ -249,6 +270,26 @@
       'contact.cv': 'Résumé',
       'contact.cvValue': 'Download CV (PDF)',
 
+      'beyond.c2Stats': 'Stats on RoyaleAPI',
+      'beyond.c2Open': 'Open in Clash Royale',
+      'beyond.c4Title': 'Favourite film: Shrek 2',
+      'beyond.c4Body': 'Not the first one: the second. There are arguments I am simply not willing to have. The sequel improves on everything that came before it, gives the world Puss in Boots and has a soundtrack that still holds up twenty years later. As an icebreaker, it never fails.',
+      'beyond.c4Alt': 'Poster of the film Shrek 2',
+      'beyond.c5Title': 'Fishing (with permanent consequences)',
+      'beyond.c5Body': 'Getting up before dawn to sit still on a rock and wait: after months spent staring at training curves, it is therapy. I liked my first fish enough to have it tattooed on my forearm. My grandmother\u2019s verdict was that it \u201clooks like embroidery\u201d, and I have not been able to see it any other way since.',
+      'beyond.c5Alt1': 'My first fish, held up against the sea at sunset',
+      'beyond.c5Alt2': 'Fine-line tattoo of the same fish, on the forearm',
+      'beyond.c5Cap1': 'The first one.',
+      'beyond.c5Cap2': 'And its permanent version.',
+
+      'map.subhead': 'Where I have been',
+      'map.lived': 'Lived in',
+      'map.visited': 'Visited',
+      'map.note': 'Hover over a country \u2014 or tap it \u2014 to see its name.',
+      'map.source': 'Borders: Natural Earth (public domain).',
+      'map.fallback': 'The map needs JavaScript in order to be drawn.',
+      'map.tipLived': 'lived here',
+      'map.tipVisited': 'visited',
       'footer.note': 'Hand-built with HTML, CSS and JavaScript. No framework was harmed.',
       'footer.top': 'Back to top ↑'
     }
@@ -285,6 +326,7 @@
     langButtons.forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang));
     });
+    if (typeof relabelMap === 'function') relabelMap();
   }
 
   langButtons.forEach(function (btn) {
@@ -420,6 +462,197 @@
   /* =======================================================
      ANNO NEL FOOTER
      ======================================================= */
+
+  /* =======================================================
+     MAPPA DEI VIAGGI
+     Disegna un SVG dai confini in world-map-data.js e li colora
+     secondo le liste in travels.js. Proiezione di Robinson.
+     ======================================================= */
+  var mapEl = document.getElementById('worldMap');
+
+  /* Tabelle standard di Robinson, latitudine da 0° a 90° a passi di 5° */
+  var ROB_X = [1, 0.9986, 0.9954, 0.99, 0.9822, 0.973, 0.96, 0.9427, 0.9216,
+               0.8962, 0.8679, 0.835, 0.7986, 0.7597, 0.7186, 0.6732, 0.6213, 0.5722, 0.5322];
+  var ROB_Y = [0, 0.062, 0.124, 0.186, 0.248, 0.31, 0.372, 0.434, 0.4958,
+               0.5571, 0.6176, 0.6769, 0.7346, 0.7903, 0.8435, 0.8936, 0.9394, 0.9761, 1];
+
+  function robinson(lon, lat) {
+    var a = Math.min(Math.abs(lat), 90);
+    var i = Math.min(Math.floor(a / 5), 17);
+    var t = (a - i * 5) / 5;
+    var kx = ROB_X[i] + (ROB_X[i + 1] - ROB_X[i]) * t;
+    var ky = ROB_Y[i] + (ROB_Y[i + 1] - ROB_Y[i]) * t;
+    return [0.8487 * kx * lon * Math.PI / 180,
+            1.3523 * ky * (lat < 0 ? -1 : 1)];
+  }
+
+  function buildMap() {
+    if (!mapEl || !window.WORLD_GEO) return null;
+
+    var travels = window.TRAVELS || { lived: [], visited: [] };
+    var lived = {}, visited = {};
+    (travels.lived || []).forEach(function (c) { lived[String(c).toUpperCase()] = true; });
+    (travels.visited || []).forEach(function (c) { visited[String(c).toUpperCase()] = true; });
+
+    /* Proietto tutto una volta sola e tengo i limiti reali per il viewBox */
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    var projected = {};
+
+    Object.keys(WORLD_GEO).forEach(function (code) {
+      projected[code] = WORLD_GEO[code].g.map(function (poly) {
+        return poly.map(function (flat) {
+          var pts = [];
+          for (var i = 0; i < flat.length; i += 2) {
+            var p = robinson(flat[i], flat[i + 1]);
+            if (p[0] < minX) minX = p[0];
+            if (p[0] > maxX) maxX = p[0];
+            if (p[1] < minY) minY = p[1];
+            if (p[1] > maxY) maxY = p[1];
+            pts.push(p);
+          }
+          return pts;
+        });
+      });
+    });
+
+    /* y va invertita: in SVG cresce verso il basso */
+    var pad = 0.02 * (maxX - minX);
+    var vw = (maxX - minX) + pad * 2;
+    var vh = (maxY - minY) + pad * 2;
+    var K = 1000 / vw;
+
+    function d(polys) {
+      var out = [];
+      polys.forEach(function (poly) {
+        poly.forEach(function (ring) {
+          var seg = [];
+          ring.forEach(function (p) {
+            seg.push(((p[0] - minX + pad) * K).toFixed(1) + ',' +
+                     ((maxY - p[1] + pad) * K).toFixed(1));
+          });
+          out.push('M' + seg.join('L') + 'Z');
+        });
+      });
+      return out.join('');
+    }
+
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 1000 ' + (vh * K).toFixed(1));
+    svg.setAttribute('class', 'worldmap');
+    svg.setAttribute('role', 'img');
+
+    var titleEl = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    svg.appendChild(titleEl);
+
+    var nLived = 0, nVisited = 0;
+    var paths = [];
+    var POINTS = window.WORLD_POINTS || {};
+
+    Object.keys(projected).sort().forEach(function (code) {
+      var state = lived[code] ? 'lived' : (visited[code] ? 'visited' : 'none');
+      if (state === 'lived') nLived++;
+      else if (state === 'visited') nVisited++;
+
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d(projected[code]));
+      path.setAttribute('fill-rule', 'evenodd');
+      path.setAttribute('class', 'country country--' + state);
+      path.setAttribute('data-code', code);
+      /* <title> nativo: accessibile e utile anche senza il tooltip custom */
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      path.appendChild(t);
+      paths.push(path);
+      svg.appendChild(path);
+    });
+
+    /* Microstati: alla scala mondiale non hanno una forma visibile, quindi
+       li disegno come pallino — ma solo se sono stati visitati o ci ho vissuto,
+       altrimenti la mappa si riempirebbe di puntini inutili. */
+    Object.keys(POINTS).forEach(function (code) {
+      var state = lived[code] ? 'lived' : (visited[code] ? 'visited' : null);
+      if (!state) return;
+      if (state === 'lived') nLived++; else nVisited++;
+
+      var xy = robinson(POINTS[code].p[0], POINTS[code].p[1]);
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', ((xy[0] - minX + pad) * K).toFixed(1));
+      c.setAttribute('cy', ((maxY - xy[1] + pad) * K).toFixed(1));
+      c.setAttribute('r', '3.4');
+      c.setAttribute('class', 'country country--dot country--' + state);
+      c.setAttribute('data-code', code);
+      var ct = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      c.appendChild(ct);
+      paths.push(c);
+      svg.appendChild(c);
+    });
+
+    /* Un codice che non esiste da nessuna parte è quasi sempre un refuso in
+       travels.js: meglio dirlo in console che ignorarlo in silenzio. */
+    var unknown = Object.keys(lived).concat(Object.keys(visited)).filter(function (c) {
+      return !WORLD_GEO[c] && !POINTS[c];
+    });
+    if (unknown.length) {
+      console.warn('travels.js: codici paese non riconosciuti → ' + unknown.join(', '));
+    }
+
+    var fallback = mapEl.querySelector('.map__fallback');
+    if (fallback) fallback.remove();
+    mapEl.insertBefore(svg, mapEl.firstChild);
+
+    var elLived = document.getElementById('mapCountLived');
+    var elVisited = document.getElementById('mapCountVisited');
+    if (elLived) elLived.textContent = String(nLived);
+    if (elVisited) elVisited.textContent = String(nVisited);
+
+    /* ---- tooltip ---- */
+    var tip = document.getElementById('mapTip');
+
+    function labelFor(code) {
+      var geo = WORLD_GEO[code] || POINTS[code];
+      if (!geo) return code;
+      var lang = root.getAttribute('lang') === 'en' ? 'en' : 'it';
+      var dict = I18N[lang];
+      var name = geo[lang] || geo.en;
+      if (lived[code]) return name + ' · ' + dict['map.tipLived'];
+      if (visited[code]) return name + ' · ' + dict['map.tipVisited'];
+      return name;
+    }
+
+    function showTip(code, ev) {
+      if (!tip) return;
+      tip.textContent = labelFor(code);
+      tip.hidden = false;
+      var box = mapEl.getBoundingClientRect();
+      var x = ev.clientX - box.left, y = ev.clientY - box.top;
+      /* tengo il tooltip dentro i bordi della mappa */
+      tip.style.left = Math.max(4, Math.min(x, box.width - tip.offsetWidth - 4)) + 'px';
+      tip.style.top = Math.max(4, y - tip.offsetHeight - 12) + 'px';
+    }
+    function hideTip() { if (tip) tip.hidden = true; }
+
+    svg.addEventListener('pointermove', function (ev) {
+      var p = ev.target.closest ? ev.target.closest('.country') : null;
+      if (p) showTip(p.getAttribute('data-code'), ev);
+      else hideTip();
+    });
+    svg.addEventListener('pointerleave', hideTip);
+    mapEl.addEventListener('pointerleave', hideTip);
+
+    /* i nomi dei paesi seguono la lingua scelta */
+    function relabel() {
+      var lang = root.getAttribute('lang') === 'en' ? 'en' : 'it';
+      titleEl.textContent = I18N[lang]['map.subhead'];
+      paths.forEach(function (p) {
+        p.firstChild.textContent = labelFor(p.getAttribute('data-code'));
+      });
+      hideTip();
+    }
+    relabel();
+    return relabel;
+  }
+
+  var relabelMap = buildMap();
+
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
 })();

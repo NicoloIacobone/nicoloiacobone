@@ -24,6 +24,10 @@
   --nav-bg:        rgba(255, 255, 255, .78);
   --glow-1:        rgba(47, 91, 216, .13);
   --glow-2:        rgba(13, 148, 136, .10);
+  --map-land:      #e4e9f0;
+  --map-line:      #ffffff;
+  --map-visited:   #3f9e68;
+  --map-lived:     #dd8a22;
   --radius:        14px;
   --radius-lg:     20px;
   --wrap:          1120px;
@@ -51,6 +55,10 @@
   --shadow-md:     0 4px 10px rgba(0, 0, 0, .35), 0 12px 28px rgba(0, 0, 0, .38);
   --shadow-lg:     0 12px 24px rgba(0, 0, 0, .4), 0 32px 64px rgba(0, 0, 0, .45);
   --nav-bg:        rgba(14, 17, 24, .78);
+  --map-land:      #232b3d;
+  --map-line:      #0e1118;
+  --map-visited:   #4cb87c;
+  --map-lived:     #eda344;
   --glow-1:        rgba(126, 162, 255, .16);
   --glow-2:        rgba(79, 209, 197, .10);
   color-scheme: dark;
@@ -78,6 +86,8 @@ body {
 }
 
 img { max-width: 100%; height: auto; display: block; }
+/* deve battere le regole display delle classi (es. .card__figure{display:grid}) */
+[hidden] { display: none !important; }
 a { color: inherit; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 h1, h2, h3, h4 { margin: 0; line-height: 1.2; font-weight: 600; letter-spacing: -.02em; }
@@ -494,6 +504,88 @@ a.linkpill:hover {
 .footer__top { text-decoration: none; font-weight: 550; transition: color .18s ease; }
 .footer__top:hover { color: var(--accent-text); }
 
+/* ---------- Card larga: galleria pesca ---------- */
+.card--wide { grid-column: span 2; }
+
+.card__gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.card__shot { margin: 0; }
+.card__shot img {
+  width: 100%; height: 210px; object-fit: cover;
+  border-radius: 12px; border: 1px solid var(--line);
+  background: var(--bg-inset);
+}
+.card__shot:first-child img { object-position: center 62%; }
+.card__shot figcaption {
+  margin-top: 7px; font-size: 12.8px; color: var(--text-faint); text-align: center;
+}
+
+/* ---------- Locandina film ---------- */
+.card__figure--poster { padding: 0; background: none; border: 0; }
+.card__figure--poster img {
+  width: 100%; max-height: 240px; object-fit: contain;
+  border-radius: 12px;
+  filter: drop-shadow(0 10px 22px rgba(16, 24, 40, .2));
+  animation: none;
+}
+
+/* ---------- Mappa dei viaggi ---------- */
+.map { margin: 0; }
+
+.map__legend { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 16px; }
+.legenditem {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 14.5px; color: var(--text-soft);
+}
+.swatch {
+  width: 15px; height: 15px; border-radius: 5px; flex: none;
+  border: 1px solid rgba(0, 0, 0, .16);
+}
+.swatch--visited { background: var(--map-visited); }
+.swatch--lived   { background: var(--map-lived); }
+.legenditem__n {
+  padding: 1px 9px; border-radius: 999px;
+  background: var(--bg-inset); border: 1px solid var(--line);
+  color: var(--text); font-size: 13px;
+}
+
+.map__canvas {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--bg-elev); border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.map__fallback { padding: 40px 0; text-align: center; color: var(--text-faint); font-size: 14.5px; }
+
+.worldmap { display: block; width: 100%; height: auto; }
+.country {
+  fill: var(--map-land);
+  stroke: var(--map-line);
+  stroke-width: 0.6;
+  transition: fill .18s ease;
+}
+.country--visited { fill: var(--map-visited); }
+/* microstati: pallino con contorno, altrimenti si perdono sul fondo */
+.country--dot { stroke: var(--bg-elev); stroke-width: 1.4; }
+.country--dot.country--lived { stroke-width: 1.4; }
+.country--lived   { fill: var(--map-lived); stroke: var(--map-line); stroke-width: 0.9; }
+/* l'evidenziazione all'hover funziona anche in stampa e senza JS */
+.worldmap:hover .country:hover { fill: var(--accent); }
+
+.map__tip {
+  position: absolute; z-index: 5; pointer-events: none;
+  padding: 6px 11px; border-radius: 8px;
+  background: var(--text); color: var(--bg);
+  font-size: 13px; font-weight: 550; white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+
+.map__note {
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  margin-top: 12px; font-size: 13.2px; color: var(--text-faint);
+}
+.map__src { opacity: .8; }
+
 /* =========================================================
    RESPONSIVE
    ========================================================= */
@@ -503,6 +595,7 @@ a.linkpill:hover {
   .about__grid { grid-template-columns: 1fr; }
   .about__stats { grid-template-columns: repeat(3, 1fr); }
   .cards--3 { grid-template-columns: 1fr 1fr; }
+  .card--wide { grid-column: span 2; }
   .contact__grid { grid-template-columns: repeat(2, 1fr); }
   .contactcard--cv { grid-column: span 2; }
 }
@@ -528,6 +621,9 @@ a.linkpill:hover {
   .nav__links a { padding: 12px 14px; font-size: 15.5px; }
 
   .cards--2, .cards--3, .skills, .contact__grid { grid-template-columns: 1fr; }
+  .card--wide { grid-column: auto; }
+  .card__shot img { height: 175px; }
+  .map__canvas { padding: 6px 8px; }
   .contactcard--cv { grid-column: auto; }
   .about__stats { grid-template-columns: 1fr; }
   .timeline { padding-left: 20px; }
