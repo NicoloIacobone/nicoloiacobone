@@ -378,11 +378,27 @@
 
         <div class="map__canvas" id="worldMap">
           <p class="map__fallback" data-i18n="map.fallback">La mappa richiede JavaScript.</p>
+
+          <div class="map__zoom">
+            <button type="button" id="mapZoomIn" class="zoombtn"
+                    data-i18n-attr="aria-label,title" data-i18n="map.zoomIn" aria-label="Ingrandisci" title="Ingrandisci">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>
+            </button>
+            <button type="button" id="mapZoomOut" class="zoombtn" disabled
+                    data-i18n-attr="aria-label,title" data-i18n="map.zoomOut" aria-label="Riduci" title="Riduci">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>
+            </button>
+            <button type="button" id="mapZoomReset" class="zoombtn" disabled
+                    data-i18n-attr="aria-label,title" data-i18n="map.zoomReset" aria-label="Reimposta la vista" title="Reimposta la vista">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v4.4h-4.4"/></svg>
+            </button>
+          </div>
+
           <div class="map__tip" id="mapTip" hidden></div>
         </div>
 
         <figcaption class="map__note">
-          <span data-i18n="map.note">Passa sopra un paese per il nome.</span>
+          <span data-i18n="map.note">Passa sopra un paese — o toccalo — per vederne il nome. Pizzica per ingrandire.</span>
           <span class="map__src" data-i18n="map.source">Confini: Natural Earth (pubblico dominio).</span>
         </figcaption>
       </figure>

@@ -149,9 +149,12 @@
       'map.subhead': 'Dove sono stato',
       'map.lived': 'Ci ho vissuto',
       'map.visited': 'Visitati',
-      'map.note': 'Passa sopra un paese \u2014 o toccalo \u2014 per vederne il nome.',
+      'map.note': 'Passa sopra un paese \u2014 o toccalo \u2014 per vederne il nome. Pizzica per ingrandire.',
       'map.source': 'Confini: Natural Earth (pubblico dominio).',
       'map.fallback': 'La mappa richiede JavaScript per essere disegnata.',
+      'map.zoomIn': 'Ingrandisci',
+      'map.zoomOut': 'Riduci',
+      'map.zoomReset': 'Reimposta la vista',
       'map.tipLived': 'ci ho vissuto',
       'map.tipVisited': 'visitato',
 
@@ -285,9 +288,12 @@
       'map.subhead': 'Where I have been',
       'map.lived': 'Lived in',
       'map.visited': 'Visited',
-      'map.note': 'Hover over a country \u2014 or tap it \u2014 to see its name.',
+      'map.note': 'Hover over a country \u2014 or tap it \u2014 to see its name. Pinch to zoom in.',
       'map.source': 'Borders: Natural Earth (public domain).',
       'map.fallback': 'The map needs JavaScript in order to be drawn.',
+      'map.zoomIn': 'Zoom in',
+      'map.zoomOut': 'Zoom out',
+      'map.zoomReset': 'Reset the view',
       'map.tipLived': 'lived here',
       'map.tipVisited': 'visited',
       'footer.note': 'Hand-built with HTML, CSS and JavaScript. No framework was harmed.',
@@ -604,6 +610,66 @@
     if (elLived) elLived.textContent = String(nLived);
     if (elVisited) elVisited.textContent = String(nVisited);
 
+    /* ---- zoom e spostamento ---- */
+    var btnIn = document.getElementById('mapZoomIn');
+    var btnOut = document.getElementById('mapZoomOut');
+    var btnReset = document.getElementById('mapZoomReset');
+
+    var BASE = { x: 0, y: 0, w: 1000, h: +(vh * K).toFixed(1) };
+    var view = { x: BASE.x, y: BASE.y, w: BASE.w, h: BASE.h };
+    var MAX_ZOOM = 8;
+
+    function zoomLevel() { return BASE.w / view.w; }
+
+    function applyView() {
+      svg.setAttribute('viewBox', view.x + ' ' + view.y + ' ' + view.w + ' ' + view.h);
+      /* A riposo lascio che il dito scorra la pagina; da ingrandita prendo io
+         tutti i gesti, altrimenti non si riesce a spostare la mappa. */
+      svg.style.touchAction = zoomLevel() > 1.01 ? 'none' : 'pan-y';
+      if (btnOut) btnOut.disabled = zoomLevel() <= 1.01;
+      if (btnReset) btnReset.disabled = zoomLevel() <= 1.01;
+      if (btnIn) btnIn.disabled = zoomLevel() >= MAX_ZOOM - 0.01;
+    }
+
+    function clampView() {
+      var z = zoomLevel();
+      if (z < 1) { view.w = BASE.w; view.h = BASE.h; }
+      else if (z > MAX_ZOOM) { view.w = BASE.w / MAX_ZOOM; view.h = BASE.h / MAX_ZOOM; }
+      view.x = Math.max(BASE.x, Math.min(view.x, BASE.x + BASE.w - view.w));
+      view.y = Math.max(BASE.y, Math.min(view.y, BASE.y + BASE.h - view.h));
+    }
+
+    /* da coordinate schermo a coordinate del viewBox */
+    function toView(cx, cy) {
+      var r = svg.getBoundingClientRect();
+      return { x: view.x + (cx - r.left) / r.width * view.w,
+               y: view.y + (cy - r.top) / r.height * view.h };
+    }
+
+    /* ingrandisce mantenendo fermo il punto sotto le dita */
+    function zoomAt(cx, cy, factor) {
+      var p = toView(cx, cy);
+      var rx = (p.x - view.x) / view.w, ry = (p.y - view.y) / view.h;
+      var w = view.w / factor, h = view.h / factor;
+      var z = BASE.w / w;
+      if (z < 1) { w = BASE.w; h = BASE.h; }
+      else if (z > MAX_ZOOM) { w = BASE.w / MAX_ZOOM; h = BASE.h / MAX_ZOOM; }
+      view.x = p.x - rx * w; view.y = p.y - ry * h; view.w = w; view.h = h;
+      clampView(); applyView();
+    }
+
+    function panBy(dxPx, dyPx) {
+      var r = svg.getBoundingClientRect();
+      view.x -= dxPx / r.width * view.w;
+      view.y -= dyPx / r.height * view.h;
+      clampView(); applyView();
+    }
+
+    function resetView() {
+      view.x = BASE.x; view.y = BASE.y; view.w = BASE.w; view.h = BASE.h;
+      applyView();
+    }
+
     /* ---- tooltip ---- */
     var tip = document.getElementById('mapTip');
 
@@ -630,13 +696,113 @@
     }
     function hideTip() { if (tip) tip.hidden = true; }
 
-    svg.addEventListener('pointermove', function (ev) {
-      var p = ev.target.closest ? ev.target.closest('.country') : null;
-      if (p) showTip(p.getAttribute('data-code'), ev);
-      else hideTip();
+    /* ---- gesti: pinch per ingrandire, trascinamento, tap per il nome ---- */
+    var pts = {};                 /* puntatori attivi, per id */
+    var nPts = 0;
+    var pinchDist = 0, pinchMid = null;
+    var tapFrom = null, tapMoved = false, tapTarget = null;
+
+    function pointerList() {
+      var out = [];
+      for (var k in pts) if (pts.hasOwnProperty(k)) out.push(pts[k]);
+      return out;
+    }
+    function distance(a, b) {
+      return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    }
+    function countryAt(ev) {
+      return ev.target && ev.target.closest ? ev.target.closest('.country') : null;
+    }
+
+    svg.addEventListener('pointerdown', function (ev) {
+      if (!pts[ev.pointerId]) nPts++;
+      pts[ev.pointerId] = { x: ev.clientX, y: ev.clientY };
+      try { svg.setPointerCapture(ev.pointerId); } catch (e) {}
+
+      if (nPts === 1) {
+        tapFrom = { x: ev.clientX, y: ev.clientY };
+        tapMoved = false;
+        /* Il paese va letto ORA: dopo setPointerCapture gli eventi vengono
+           reindirizzati all'SVG e in pointerup ev.target non è più il paese. */
+        tapTarget = countryAt(ev);
+      } else if (nPts === 2) {
+        var a = pointerList();
+        pinchDist = distance(a[0], a[1]);
+        pinchMid = { x: (a[0].x + a[1].x) / 2, y: (a[0].y + a[1].y) / 2 };
+        tapFrom = null; tapTarget = null;   /* due dita non sono mai un tap */
+        hideTip();
+      }
     });
-    svg.addEventListener('pointerleave', hideTip);
-    mapEl.addEventListener('pointerleave', hideTip);
+
+    svg.addEventListener('pointermove', function (ev) {
+      /* Mouse che passa senza premere: è il vecchio hover, mostra il nome. */
+      if (!pts[ev.pointerId]) {
+        if (ev.pointerType === 'mouse') {
+          var hov = countryAt(ev);
+          if (hov) showTip(hov.getAttribute('data-code'), ev); else hideTip();
+        }
+        return;
+      }
+
+      var prev = pts[ev.pointerId];
+      var dx = ev.clientX - prev.x, dy = ev.clientY - prev.y;
+      pts[ev.pointerId] = { x: ev.clientX, y: ev.clientY };
+
+      if (tapFrom && distance(tapFrom, { x: ev.clientX, y: ev.clientY }) > 8) tapMoved = true;
+
+      if (nPts >= 2) {
+        var a = pointerList();
+        var d = distance(a[0], a[1]);
+        var mid = { x: (a[0].x + a[1].x) / 2, y: (a[0].y + a[1].y) / 2 };
+        if (pinchDist > 0 && d > 0) zoomAt(mid.x, mid.y, d / pinchDist);
+        if (pinchMid) panBy(mid.x - pinchMid.x, mid.y - pinchMid.y);
+        pinchDist = d; pinchMid = mid;
+        ev.preventDefault();
+      } else if (zoomLevel() > 1.01) {
+        /* una sola dita/mouse: sposta la mappa, ma solo se è ingrandita */
+        panBy(dx, dy);
+        hideTip();
+        ev.preventDefault();
+      }
+    });
+
+    function endPointer(ev) {
+      var wasTap = tapFrom && !tapMoved && nPts === 1;
+      if (pts[ev.pointerId]) { delete pts[ev.pointerId]; nPts = Math.max(0, nPts - 1); }
+      try { svg.releasePointerCapture(ev.pointerId); } catch (e) {}
+      if (nPts < 2) { pinchDist = 0; pinchMid = null; }
+
+      /* Tap netto su un paese: mostro il nome. Su touch non c'è hover, quindi
+         senza questo il tooltip non comparirebbe mai. */
+      if (wasTap && ev.type === 'pointerup') {
+        if (tapTarget) showTip(tapTarget.getAttribute('data-code'), ev);
+        else hideTip();
+      }
+      if (nPts === 0) { tapFrom = null; tapMoved = false; tapTarget = null; }
+    }
+    svg.addEventListener('pointerup', endPointer);
+    svg.addEventListener('pointercancel', endPointer);
+
+    /* il mouse che esce dalla mappa nasconde il tooltip; il tap no */
+    svg.addEventListener('pointerleave', function (ev) {
+      if (ev.pointerType === 'mouse') hideTip();
+    });
+    /* un tocco fuori dalla mappa chiude il tooltip rimasto aperto */
+    document.addEventListener('pointerdown', function (ev) {
+      if (!mapEl.contains(ev.target)) hideTip();
+    });
+
+    if (btnIn) btnIn.addEventListener('click', function () {
+      var r = svg.getBoundingClientRect();
+      zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1.6);
+    });
+    if (btnOut) btnOut.addEventListener('click', function () {
+      var r = svg.getBoundingClientRect();
+      zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.6);
+    });
+    if (btnReset) btnReset.addEventListener('click', function () { resetView(); hideTip(); });
+
+    applyView();
 
     /* i nomi dei paesi seguono la lingua scelta */
     function relabel() {

@@ -455,8 +455,15 @@ a.linkpill:hover {
   width: 118px; height: auto;
   filter: drop-shadow(0 8px 18px rgba(16, 24, 40, .22));
   animation: float 5.5s ease-in-out infinite;
+  /* Promuovo l'immagine a livello di composizione: senza questo, il browser
+     ricalcola la drop-shadow a ogni frame e su mobile si vede tremolare. */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
-@keyframes float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-7px) rotate(1deg); } }
+/* Niente rotazione: ruotare un bitmap di frazioni di grado lo ricampiona a ogni
+   frame ed è la seconda causa del tremolio. Solo traslazione verticale. */
+@keyframes float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -7px, 0); } }
 
 /* ---------- Skills ---------- */
 .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -562,7 +569,30 @@ a.linkpill:hover {
 }
 .map__fallback { padding: 40px 0; text-align: center; color: var(--text-faint); font-size: 14.5px; }
 
-.worldmap { display: block; width: 100%; height: auto; }
+.worldmap {
+  display: block; width: 100%; height: auto;
+  /* a riposo il dito scorre la pagina; da ingrandita il JS passa a "none" */
+  touch-action: pan-y;
+  cursor: grab;
+}
+.worldmap:active { cursor: grabbing; }
+
+/* ---- controlli zoom ---- */
+.map__zoom {
+  position: absolute; z-index: 4; right: 12px; top: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.zoombtn {
+  display: grid; place-items: center;
+  width: 34px; height: 34px; padding: 0;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg-elev); color: var(--text-soft);
+  font-size: 16px; cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: color .18s ease, border-color .18s ease, opacity .18s ease;
+}
+.zoombtn:hover:not(:disabled) { color: var(--accent-text); border-color: var(--accent); }
+.zoombtn:disabled { opacity: .38; cursor: default; }
 .country {
   fill: var(--map-land);
   stroke: var(--map-line);
@@ -627,8 +657,12 @@ a.linkpill:hover {
 
   .cards--2, .cards--3, .skills, .contact__grid { grid-template-columns: 1fr; }
   .card--wide { grid-column: auto; }
+  /* Su mobile l'effetto non vale il costo di ridisegno: fermo l'animazione. */
+  .card__figure img { animation: none; transform: none; will-change: auto; }
   .card__shot img { height: 175px; }
   .map__canvas { padding: 6px 8px; }
+  .map__zoom { right: 8px; top: 8px; }
+  .zoombtn { width: 38px; height: 38px; }
   .contactcard--cv { grid-column: auto; }
   .about__stats { grid-template-columns: 1fr; }
   .timeline { padding-left: 20px; }
