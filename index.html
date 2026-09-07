@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="meta.title">Nicolò Iacobone — Computer Vision &amp; 3D Deep Learning Researcher</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Sito personale di Nicolò Iacobone, ricercatore in Computer Vision e 3D Deep Learning presso il gruppo Photogrammetry &amp; Remote Sensing dell'ETH di Zurigo.">
+<meta name="author" content="Nicolò Iacobone">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="Nicolò Iacobone — Computer Vision &amp; 3D Deep Learning Researcher">
+<meta property="og:description" content="Computer Vision &amp; 3D Deep Learning Researcher — ETH Zürich, Photogrammetry &amp; Remote Sensing.">
+<meta property="og:image" content="foto_profilo.jpeg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.nicoloiacobone.it/">
+<link rel="canonical" href="https://www.nicoloiacobone.it/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232f5bd8'/><text x='50' y='69' font-size='58' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'>NI</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+<script>
+/* Applica tema e lingua prima del primo paint per evitare il flash */
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+    var l = localStorage.getItem('lang');
+    if (!l) l = (navigator.language || 'it').toLowerCase().indexOf('it') === 0 ? 'it' : 'en';
+    document.documentElement.setAttribute('lang', l);
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main" data-i18n="a11y.skip">Vai al contenuto</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="#hero">
+      <span class="nav__mark" aria-hidden="true">NI</span>
+      <span class="nav__brandtext">Nicolò Iacobone</span>
+    </a>
+
+    <nav class="nav__links" id="navLinks" aria-label="Main">
+      <a href="#about" data-i18n="nav.about">Chi sono</a>
+      <a href="#research" data-i18n="nav.research">Ricerca</a>
+      <a href="#beyond" data-i18n="nav.beyond">Oltre la ricerca</a>
+      <a href="#contact" data-i18n="nav.contact">Contatti</a>
+    </nav>
+
+    <div class="nav__tools">
+      <div class="langswitch" role="group" data-i18n-attr="aria-label" data-i18n="a11y.langGroup" aria-label="Lingua">
+        <button type="button" class="langswitch__btn" data-lang="it" aria-pressed="true">IT</button>
+        <button type="button" class="langswitch__btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+
+      <button type="button" class="iconbtn" id="themeToggle" data-i18n-attr="aria-label,title" data-i18n="a11y.theme" aria-label="Cambia tema" title="Cambia tema">
+        <svg class="icon icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.2v2.4M12 19.4v2.4M2.2 12h2.4M19.4 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+        <svg class="icon icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg>
+      </button>
+
+      <button type="button" class="iconbtn navtoggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" data-i18n-attr="aria-label,title" data-i18n="a11y.menu" aria-label="Apri il menu" title="Menu">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path class="navtoggle__top" d="M4 7h16"/><path class="navtoggle__mid" d="M4 12h16"/><path class="navtoggle__bot" d="M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="wrap hero__grid">
+      <div class="hero__text">
+        <p class="eyebrow reveal">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-i18n="hero.badge">ETH Zürich · Photogrammetry &amp; Remote Sensing</span>
+        </p>
+        <h1 class="hero__name reveal" style="--d:60ms">Nicolò Iacobone</h1>
+        <p class="hero__role reveal" style="--d:120ms" data-i18n="hero.role">Computer Vision &amp; 3D Deep Learning Researcher</p>
+        <p class="hero__tag reveal" style="--d:180ms" data-i18n="hero.tagline">Insegno alle macchine a capire lo spazio: ricostruzione 3D feed-forward e segmentazione delle scene, senza etichette 3D.</p>
+
+        <ul class="hero__facts reveal" style="--d:240ms">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span data-i18n="hero.fact1">Bari, Italia · disponibile a trasferirsi</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.9 6 3.9 9S14.6 18.3 12 21c-2.6-2.7-3.9-6-3.9-9S9.4 5.7 12 3z"/></svg><span data-i18n="hero.fact2">Cittadino UE</span></li>
+        </ul>
+
+        <div class="hero__cta reveal" style="--d:300ms">
+          <a class="btn btn--primary" href="CV.pdf" download>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11.5M7.6 10.6 12 15l4.4-4.4M4.5 19.5h15"/></svg>
+            <span data-i18n="hero.cvBtn">Scarica il CV</span>
+          </a>
+          <a class="btn btn--ghost" href="#contact">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.6 6.6 8.4 6 8.4-6"/></svg>
+            <span data-i18n="hero.contactBtn">Contattami</span>
+          </a>
+        </div>
+      </div>
+
+      <figure class="hero__photo reveal" style="--d:200ms">
+        <img src="foto_profilo.jpeg" width="768" height="1024"
+             data-i18n-attr="alt" data-i18n="hero.photoAlt"
+             alt="Ritratto di Nicolò Iacobone">
+        <figcaption class="hero__photocaption" aria-hidden="true">
+          <span class="mono">MSc @ PoliTo · 108/110</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ CHI SONO ============ -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="section__kicker" data-i18n="about.kicker">01 — Chi sono</p>
+        <h2 class="section__title" data-i18n="about.title">Un ricercatore con la valigia pronta</h2>
+      </header>
+
+      <div class="about__grid">
+        <div class="about__prose reveal">
+          <p data-i18n="about.p1">Lavoro sulla ricostruzione 3D feed-forward e sulla comprensione semantica delle scene: in pratica, provo a far sì che un modello guardi una manciata di immagini e ne ricavi una scena tridimensionale coerente, con gli oggetti al posto giusto e riconosciuti come tali.</p>
+          <p data-i18n="about.p2">Ho conseguito la laurea magistrale in Ingegneria Informatica (Artificial Intelligence and Data Analytics) al Politecnico di Torino con 108/110, svolgendo la tesi all'ETH di Zurigo. Da lì la collaborazione è continuata: oggi sono Research Collaborator nel gruppo di Photogrammetry &amp; Remote Sensing dell'ETH.</p>
+          <p data-i18n="about.p3">Vivo a Bari, sono cittadino UE e sono disponibile a trasferirmi ovunque. Cerco posizioni orientate alla ricerca o un dottorato finanziato dall'industria nel campo della percezione 3D e del representation learning.</p>
+        </div>
+
+        <ul class="about__stats reveal" style="--d:100ms">
+          <li class="stat">
+            <span class="stat__num">108<span class="stat__den">/110</span></span>
+            <span class="stat__label" data-i18n="about.stat1">Laurea magistrale al Politecnico di Torino</span>
+          </li>
+          <li class="stat">
+            <span class="stat__num">ETH</span>
+            <span class="stat__label" data-i18n="about.stat2">Zürich — tesi e ricerca attuale</span>
+          </li>
+          <li class="stat">
+            <span class="stat__num">3</span>
+            <span class="stat__label" data-i18n="about.stat3">Paesi in cui ho studiato: Italia, Romania, Svizzera</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RICERCA ============ -->
+  <section class="section section--alt" id="research">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="section__kicker" data-i18n="research.kicker">02 — Ricerca</p>
+        <h2 class="section__title" data-i18n="research.title">Percorso, progetti e strumenti</h2>
+        <p class="section__lead" data-i18n="research.lead">Dalla ricostruzione geometrica alla semantica: percorso accademico, progetti e competenze tecniche.</p>
+      </header>
+
+      <h3 class="subhead reveal" data-i18n="research.expTitle">Esperienza</h3>
+      <ol class="timeline">
+        <li class="tl reveal">
+          <div class="tl__marker" aria-hidden="true"></div>
+          <div class="tl__card">
+            <p class="tl__date mono" data-i18n="research.exp1Date">Mar 2026 — oggi</p>
+            <h4 class="tl__role" data-i18n="research.exp1Role">Research Collaborator — ETH Zürich</h4>
+            <p class="tl__org" data-i18n="research.exp1Org">Photogrammetry &amp; Remote Sensing (D-BAUG) · da remoto</p>
+            <p class="tl__topic" data-i18n="research.exp1Topic">3D-Consistent Instance Segmentation on Frozen Feed-Forward Backbones</p>
+            <ul class="tl__list">
+              <li data-i18n="research.exp1b1">Decoder transformer in stile MaskDINO addestrato su un backbone VGGT-1B completamente congelato, per segmentazione di istanze 3D coerente tra viste: solo annotazioni 2D di ScanNet v2, nessuna etichetta 3D.</li>
+              <li data-i18n="research.exp1b2">Set di query condiviso tra i bundle di viste: per costruzione una query segue una singola istanza attraverso tutti i frame, con identità garantita da cross-frame attention e parametrizzazione 3D opzionale.</li>
+              <li data-i18n="research.exp1b3">Stack PyTorch completo — pixel decoder con deformable attention, selezione delle query a due stadi con denoising, matcher ungherese, caching delle feature per scena (da ore a minuti), orchestrazione SLURM — e il bridge di valutazione 2D→3D completamente unposed.</li>
+              <li data-i18n="research.exp1b4">Programma sperimentale sistematico (curve di data scaling, ablazioni, transfer zero-shot su ScanNet200, ScanNet++ e Replica): nel setting class-agnostic unposed il metodo regge il confronto con le baseline feed-forward pubblicate, con backbone congelato e circa un terzo delle viste per scena.</li>
+            </ul>
+            <p class="tl__links">
+              <a class="linkpill" href="https://github.com/NicoloIacobone/vggt" target="_blank" rel="noopener">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 19.2c-4 1.2-4-2.1-5.6-2.5m11.2 5.1v-3.2c0-.9.1-1.6-.5-2.2 2.8-.3 5.4-1.4 5.4-6a4.6 4.6 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 3.5 5.8 3.8 5.8 3.8a4.3 4.3 0 0 0-.1 3.2 4.6 4.6 0 0 0-1.3 3.3c0 4.5 2.6 5.6 5.4 5.9-.4.4-.6.9-.5 1.5v3.9"/></svg>
+                <span data-i18n="research.codeLink">Codice</span>
+              </a>
+            </p>
+          </div>
+        </li>
+
+        <li class="tl reveal">
+          <div class="tl__marker" aria-hidden="true"></div>
+          <div class="tl__card">
+            <p class="tl__date mono" data-i18n="research.exp2Date">Lug 2025 — Mar 2026</p>
+            <h4 class="tl__role" data-i18n="research.exp2Role">Tesi magistrale — ETH Zürich</h4>
+            <p class="tl__org" data-i18n="research.exp2Org">In collaborazione con il Politecnico di Torino</p>
+            <p class="tl__topic" data-i18n="research.exp2Topic">Towards Multi-View 3D Instance Segmentation via Semantic Distillation</p>
+            <ul class="tl__list">
+              <li data-i18n="research.exp2b1">Framework student–teacher di distillazione semantica che collega ricostruzione 3D feed-forward e foundation model 2D: un backbone geometrico (MapAnything) regredisce lo spazio latente di un teacher SAM2 congelato, sotto una loss di consistenza multi-vista.</li>
+              <li data-i18n="research.exp2b2">Individuato un collo di bottiglia di capacità degli encoder geometrici nella regressione semantica fine-grained: il vincolo da cui è nato il progetto successivo.</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+
+      <h3 class="subhead reveal" data-i18n="research.eduTitle">Formazione</h3>
+      <div class="cards cards--2">
+        <article class="card reveal">
+          <p class="card__date mono" data-i18n="research.edu1Date">Ott 2022 — Mar 2026</p>
+          <h4 class="card__title" data-i18n="research.edu1Title">MSc in Ingegneria Informatica</h4>
+          <p class="card__sub" data-i18n="research.edu1Sub">Artificial Intelligence and Data Analytics · Politecnico di Torino</p>
+          <p class="card__body" data-i18n="research.edu1Body">Votazione 108/110. Tesi svolta all'ETH di Zurigo (lug 2025 – mar 2026).</p>
+        </article>
+        <article class="card reveal" style="--d:80ms">
+          <p class="card__date mono" data-i18n="research.edu2Date">Ott 2019 — Ott 2022</p>
+          <h4 class="card__title" data-i18n="research.edu2Title">BSc in Ingegneria Informatica e dell'Automazione</h4>
+          <p class="card__sub" data-i18n="research.edu2Sub">Politecnico di Bari</p>
+          <p class="card__body" data-i18n="research.edu2Body">Scambio Erasmus alla Universitatea Tehnică din Cluj-Napoca, Romania (ott 2021 – lug 2022).</p>
+        </article>
+      </div>
+
+      <h3 class="subhead reveal" data-i18n="research.projTitle">Progetti accademici</h3>
+      <div class="cards cards--2">
+        <article class="card reveal">
+          <p class="card__date mono" data-i18n="research.proj1Date">Giu 2024</p>
+          <h4 class="card__title" data-i18n="research.proj1Title">Real-Time Anomaly Detection for Road Scenes</h4>
+          <p class="card__body" data-i18n="research.proj1Body">Ottimizzazione di modelli di anomaly detection per inferenza in tempo reale su dispositivi embedded a bassa potenza, in ottica di guida autonoma.</p>
+          <p class="card__links">
+            <a class="linkpill" href="https://drive.google.com/file/d/1yB06QOx4CIEDybjWZzZTiq0VnJbcLVkw/view?usp=sharing" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3.5H7.5A2 2 0 0 0 5.5 5.5v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8z"/><path d="M14 3.5V8h4.5"/></svg>
+              <span data-i18n="research.reportLink">Report del progetto</span>
+            </a>
+          </p>
+        </article>
+        <article class="card reveal" style="--d:80ms">
+          <p class="card__date mono" data-i18n="research.proj2Date">Mar 2024</p>
+          <h4 class="card__title" data-i18n="research.proj2Title">Synthetic Data Generation Tool — AROL Closure Systems</h4>
+          <p class="card__body" data-i18n="research.proj2Body">CVAE per la generazione di serie temporali sintetiche per singola macchina e singolo sensore, sviluppato con un partner industriale e integrato nel loro framework.</p>
+          <p class="card__links">
+            <a class="linkpill" href="https://drive.google.com/file/d/18t7iJR29Zm_ZYkMmakUAWJrKhrvQKdWT/view?usp=sharing" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3.5H7.5A2 2 0 0 0 5.5 5.5v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8z"/><path d="M14 3.5V8h4.5"/></svg>
+              <span data-i18n="research.slidesLink">Codice e slide</span>
+            </a>
+          </p>
+        </article>
+      </div>
+
+      <h3 class="subhead reveal" data-i18n="research.skillsTitle">Competenze</h3>
+      <div class="skills">
+        <div class="skillgroup reveal">
+          <h4 class="skillgroup__name" data-i18n="research.sk1">Computer Vision 3D</h4>
+          <ul class="tags">
+            <li>Multi-view 3D reconstruction</li><li data-i18n="research.sk1t2">Segmentazione di istanze e semantica 2D/3D</li><li>Point tracking</li><li data-i18n="research.sk1t4">Modelli geometrici feed-forward (VGGT, MapAnything)</li><li data-i18n="research.sk1t5">Lifting 2D→3D unposed</li><li>Sim(3) / ICP alignment</li>
+          </ul>
+        </div>
+        <div class="skillgroup reveal" style="--d:60ms">
+          <h4 class="skillgroup__name" data-i18n="research.sk2">Deep Learning</h4>
+          <ul class="tags">
+            <li>DETR / Mask2Former / MaskDINO</li><li>Deformable attention</li><li>Hungarian matching</li><li data-i18n="research.sk2t4">Knowledge distillation</li><li data-i18n="research.sk2t5">Adattamento di foundation model congelati (SAM2)</li><li data-i18n="research.sk2t6">Modelli generativi (CVAE)</li><li data-i18n="research.sk2t7">Ottimizzazione real-time / edge</li>
+          </ul>
+        </div>
+        <div class="skillgroup reveal" style="--d:120ms">
+          <h4 class="skillgroup__name" data-i18n="research.sk3">Research Engineering</h4>
+          <ul class="tags">
+            <li>PyTorch</li><li>HPC / SLURM</li><li data-i18n="research.sk3t3">Design sperimentale riproducibile, ablazioni e data-scaling</li><li>ScanNet v2 / ScanNet200 / ScanNet++ / Replica</li><li data-i18n="research.sk3t5">Regression testing di codice di ricerca</li><li>Git</li>
+          </ul>
+        </div>
+        <div class="skillgroup reveal" style="--d:180ms">
+          <h4 class="skillgroup__name" data-i18n="research.sk4">Linguaggi</h4>
+          <ul class="tags">
+            <li data-i18n="research.sk4t1">Python (avanzato)</li><li>C / C++</li><li data-i18n="research.sk4t3">Italiano (madrelingua)</li><li data-i18n="research.sk4t4">Inglese (fluente)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OLTRE LA RICERCA ============ -->
+  <section class="section" id="beyond">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="section__kicker" data-i18n="beyond.kicker">03 — Oltre la ricerca</p>
+        <h2 class="section__title" data-i18n="beyond.title">Quando il cluster sta ancora girando</h2>
+        <p class="section__lead" data-i18n="beyond.lead">Un training serio dura ore. Nel frattempo, bisogna pur fare qualcosa.</p>
+      </header>
+
+      <div class="cards cards--3 fun">
+        <article class="card card--fun reveal">
+          <div class="card__icon" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="m12 7.4 3.6 2.6-1.4 4.2H9.8L8.4 10z"/><path d="M12 3.2v4.2M19.9 9.6l-4.3.4M16.9 19.1l-2.7-4.9M7.1 19.1l2.7-4.9M4.1 9.6l4.3.4"/></svg>
+          </div>
+          <h3 class="card__title" data-i18n="beyond.c1Title">Social Media Manager dello Shakhtar Palese</h3>
+          <p class="card__body" data-i18n="beyond.c1Body">Squadra amatoriale, ambizioni da Champions League. Ho creato e gestisco da zero tutta la presenza online: pagina Instagram, sito ufficiale e TikTok. Curo contenuti, grafiche e cronache delle partite — il mio unico progetto in cui le metriche di valutazione sono le visualizzazioni e non la mAP.</p>
+          <p class="card__links">
+            <a class="linkpill" href="https://www.instagram.com/shakhtar_palese/" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none"/></svg>
+              <span>@shakhtar_palese</span>
+            </a>
+            <a class="linkpill" href="https://www.tiktok.com/@shakhtar_palese" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.4 3.2v10.9a3.6 3.6 0 1 1-3.6-3.6c.3 0 .6 0 .9.1"/><path d="M14.4 3.2c.4 2.5 2.2 4.2 4.7 4.4"/></svg>
+              <span>TikTok</span>
+            </a>
+            <a class="linkpill" href="https://shakhtarpalese.it" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M3.2 12h17.6M12 3.2c2.5 2.6 3.8 5.6 3.8 8.8S14.5 18.2 12 20.8c-2.5-2.6-3.8-5.6-3.8-8.8S9.5 5.8 12 3.2z"/></svg>
+              <span>shakhtarpalese.it</span>
+            </a>
+          </p>
+        </article>
+
+        <article class="card card--fun reveal" style="--d:90ms">
+          <figure class="card__figure">
+            <img src="campione_grandioso.png" width="364" height="394" loading="lazy"
+                 data-i18n-attr="alt" data-i18n="beyond.c2Alt"
+                 alt="Stemma Campione Grandioso di Clash Royale">
+          </figure>
+          <h3 class="card__title" data-i18n="beyond.c2Title">Campione Grandioso su Clash Royale</h3>
+          <p class="card__body" data-i18n="beyond.c2Body">Record personale: Campione Grandioso. Anni di ottimizzazione degli iperparametri del mazzo, valutazione rigorosa in condizioni avverse e una tolleranza al rumore statistico costruita partita dopo partita. Se volete verificare, il tag è pubblico.</p>
+          <p class="card__links">
+            <span class="linkpill linkpill--static">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 3.6 7.8 20.4M16.2 3.6l-1.6 16.8M3.8 8.8h16.4M3.2 15.2h16.4"/></svg>
+              <span class="mono">#P0C2UQG</span>
+            </span>
+          </p>
+        </article>
+
+        <article class="card card--fun reveal" style="--d:180ms">
+          <div class="card__icon card__icon--juggle" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3.6 15.4c0-5.4 3.8-9.8 8.4-9.8s8.4 4.4 8.4 9.8" stroke-dasharray="2.4 3"/><circle cx="4.4" cy="17.4" r="2.5"/><circle cx="12" cy="4.6" r="2.5"/><circle cx="19.6" cy="17.4" r="2.5"/></svg>
+          </div>
+          <h3 class="card__title" data-i18n="beyond.c3Title">So fare il giocoliere</h3>
+          <p class="card__body" data-i18n="beyond.c3Body">Sì, davvero: tre palline in aria contemporaneamente. È l'unica forma di multitasking in cui riesco davvero bene, ed è sorprendentemente utile per spiegare cosa succede quando devi tenere traccia di più oggetti che si muovono nello spazio. Su richiesta, dimostrazione dal vivo.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTATTI ============ -->
+  <section class="section section--alt" id="contact">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="section__kicker" data-i18n="contact.kicker">04 — Contatti</p>
+        <h2 class="section__title" data-i18n="contact.title">Parliamone</h2>
+        <p class="section__lead" data-i18n="contact.lead">Posizioni di ricerca, dottorati finanziati dall'industria, collaborazioni o semplicemente due parole sulla visione 3D: scrivetemi pure.</p>
+      </header>
+
+      <div class="contact__grid">
+        <a class="contactcard reveal" href="mailto:nicolo.iacobone@gmail.com">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.6 6.6 8.4 6 8.4-6"/></svg>
+          <span class="contactcard__label" data-i18n="contact.email">Email</span>
+          <span class="contactcard__value">nicolo.iacobone@gmail.com</span>
+        </a>
+        <a class="contactcard reveal" style="--d:60ms" href="tel:+393913702668">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.2 3.8h3l1.5 3.8-2 1.4a11.4 11.4 0 0 0 5.3 5.3l1.4-2 3.8 1.5v3a1.7 1.7 0 0 1-1.9 1.7A15.6 15.6 0 0 1 4.5 5.7a1.7 1.7 0 0 1 1.7-1.9z"/></svg>
+          <span class="contactcard__label" data-i18n="contact.phone">Telefono</span>
+          <span class="contactcard__value">+39 391 370 2668</span>
+        </a>
+        <a class="contactcard reveal" style="--d:120ms" href="https://www.linkedin.com/in/nicoloiacobone" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="3"/><path d="M7.4 10.4v6.4M7.4 7.3v.1M11.3 16.8v-6.4M11.3 12.8c0-1.4 1-2.4 2.4-2.4s2.4 1 2.4 2.4v4"/></svg>
+          <span class="contactcard__label">LinkedIn</span>
+          <span class="contactcard__value">in/nicoloiacobone</span>
+        </a>
+        <a class="contactcard reveal" style="--d:180ms" href="https://github.com/NicoloIacobone" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 19.2c-4 1.2-4-2.1-5.6-2.5m11.2 5.1v-3.2c0-.9.1-1.6-.5-2.2 2.8-.3 5.4-1.4 5.4-6a4.6 4.6 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 3.5 5.8 3.8 5.8 3.8a4.3 4.3 0 0 0-.1 3.2 4.6 4.6 0 0 0-1.3 3.3c0 4.5 2.6 5.6 5.4 5.9-.4.4-.6.9-.5 1.5v3.9"/></svg>
+          <span class="contactcard__label">GitHub</span>
+          <span class="contactcard__value">NicoloIacobone</span>
+        </a>
+        <a class="contactcard contactcard--cv reveal" style="--d:240ms" href="CV.pdf" download>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11.5M7.6 10.6 12 15l4.4-4.4M4.5 19.5h15"/></svg>
+          <span class="contactcard__label" data-i18n="contact.cv">Curriculum</span>
+          <span class="contactcard__value" data-i18n="contact.cvValue">Scarica il CV (PDF)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="footer__copy">© <span id="year">2026</span> Nicolò Iacobone</p>
+    <p class="footer__note" data-i18n="footer.note">Costruito a mano in HTML, CSS e JavaScript. Nessun framework è stato maltrattato.</p>
+    <a class="footer__top" href="#hero" data-i18n="footer.top">Torna su ↑</a>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
