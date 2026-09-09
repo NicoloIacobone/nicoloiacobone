@@ -123,7 +123,7 @@
       <div class="about__grid">
         <div class="about__prose reveal">
           <p data-i18n="about.p1">Lavoro sulla ricostruzione 3D feed-forward e sulla comprensione semantica delle scene: in pratica, provo a far sì che un modello guardi una manciata di immagini e ne ricavi una scena tridimensionale coerente, con gli oggetti al posto giusto e riconosciuti come tali.</p>
-          <p data-i18n="about.p2">Ho conseguito la laurea magistrale in Ingegneria Informatica (Artificial Intelligence and Data Analytics) al Politecnico di Torino con 108/110, svolgendo la tesi all'ETH di Zurigo. Da lì la collaborazione è continuata: oggi sono Research Collaborator nel gruppo di Photogrammetry &amp; Remote Sensing dell'ETH.</p>
+          <p data-i18n="about.p2">Ho conseguito la laurea magistrale in Ingegneria Informatica (Artificial Intelligence and Data Analytics) al Politecnico di Torino con 108/110, svolgendo la tesi all'ETH di Zurigo. Da lì la collaborazione è continuata come Research Collaborator nel gruppo di Photogrammetry &amp; Remote Sensing dell'ETH, fino a settembre 2026.</p>
           <p data-i18n="about.p3">Vivo a Bari, sono cittadino UE e sono disponibile a trasferirmi ovunque. Cerco posizioni orientate alla ricerca o un dottorato finanziato dall'industria nel campo della percezione 3D e del representation learning.</p>
         </div>
 
@@ -134,7 +134,7 @@
           </li>
           <li class="stat">
             <span class="stat__num">ETH</span>
-            <span class="stat__label" data-i18n="about.stat2">Zürich — tesi e ricerca attuale</span>
+            <span class="stat__label" data-i18n="about.stat2">Zürich — tesi e ricerca (2025–2026)</span>
           </li>
           <li class="stat">
             <span class="stat__num">3</span>
@@ -159,15 +159,16 @@
         <li class="tl reveal">
           <div class="tl__marker" aria-hidden="true"></div>
           <div class="tl__card">
-            <p class="tl__date mono" data-i18n="research.exp1Date">Mar 2026 — oggi</p>
+            <p class="tl__date mono" data-i18n="research.exp1Date">Mar 2026 — Set 2026</p>
             <h4 class="tl__role" data-i18n="research.exp1Role">Research Collaborator — ETH Zürich</h4>
             <p class="tl__org" data-i18n="research.exp1Org">Photogrammetry &amp; Remote Sensing (D-BAUG) · da remoto</p>
             <p class="tl__topic" data-i18n="research.exp1Topic">3D-Consistent Instance Segmentation on Frozen Feed-Forward Backbones</p>
             <ul class="tl__list">
-              <li data-i18n="research.exp1b1">Decoder transformer in stile MaskDINO addestrato su un backbone VGGT-1B completamente congelato, per segmentazione di istanze 3D coerente tra viste: solo annotazioni 2D di ScanNet v2, nessuna etichetta 3D.</li>
-              <li data-i18n="research.exp1b2">Set di query condiviso tra i bundle di viste: per costruzione una query segue una singola istanza attraverso tutti i frame, con identità garantita da cross-frame attention e parametrizzazione 3D opzionale.</li>
-              <li data-i18n="research.exp1b3">Stack PyTorch completo — pixel decoder con deformable attention, selezione delle query a due stadi con denoising, matcher ungherese, caching delle feature per scena (da ore a minuti), orchestrazione SLURM — e il bridge di valutazione 2D→3D completamente unposed.</li>
-              <li data-i18n="research.exp1b4">Programma sperimentale sistematico (curve di data scaling, ablazioni, transfer zero-shot su ScanNet200, ScanNet++ e Replica): nel setting class-agnostic unposed il metodo regge il confronto con le baseline feed-forward pubblicate, con backbone congelato e circa un terzo delle viste per scena.</li>
+              <li data-i18n="research.exp1b1">Decoder transformer in stile MaskDINO addestrato su un backbone VGGT-1B completamente congelato, per segmentazione di istanze 3D coerente tra viste: solo annotazioni 2D di ScanNet v2, nessuna etichetta 3D. Il caching delle feature del backbone una volta per scena ha ridotto il run a ~0,8 GPU-day contro i ~16 dei competitor.</li>
+              <li data-i18n="research.exp1b2">Set di query condiviso tra i bundle di viste: per costruzione una query segue una singola istanza attraverso tutti i frame, con identità garantita da cross-frame attention e parametrizzazione 3D opzionale — i due meccanismi dominanti nell'ablation.</li>
+              <li data-i18n="research.exp1b3">Stack PyTorch completo — pixel decoder con deformable attention, selezione delle query a due stadi con denoising, matcher ungherese, caching delle feature per scena, orchestrazione SLURM — e il bridge di valutazione 2D→3D completamente unposed (allineamento Sim(3)+ICP, lifting delle maschere per voto sulla base di depth e camere predette dal modello), sull'evaluator ufficiale e non modificato di ScanNet 3D.</li>
+              <li data-i18n="research.exp1b4">Sul benchmark ufficiale ScanNet 3D, in setting unposed e class-agnostic, con lo stesso budget di 50 viste dei competitor: 0,053 / 0,170 / 0,542 (AP/AP50/AP25), davanti a FAST3DIS (0,038 / 0,096 / 0,316) e IGGT (0,028 / 0,112 / 0,287) su tutte e tre le metriche — asimmetria quantificata, non solo dichiarata: entrambi i confronti sono zero-shot su ScanNet, e riproducendo la mixture completa di IGGT senza IGGT si resta alla pari su AP25 e ~3× indietro su AP50.</li>
+              <li data-i18n="research.exp1b5">Programma sperimentale sistematico (curve di data scaling, ablazioni del decoder confrontate con la varianza tra seed, training multi-dataset, transfer zero-shot su ScanNet200/ScanNet++/Replica) che ha localizzato la perdita residua nel lifting 2D→3D, non nel decoder.</li>
             </ul>
             <p class="tl__links">
               <a class="linkpill" href="https://github.com/NicoloIacobone/vggt" target="_blank" rel="noopener">
