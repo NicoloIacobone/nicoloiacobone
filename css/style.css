@@ -3,6 +3,58 @@
    Tema chiaro di default, dark mode via [data-theme="dark"]
    ========================================================= */
 
+/* ---------- Font (self-hosted) ----------
+   Serviti dal sito stesso, non da Google Fonts: nessuna richiesta a terzi
+   e quindi nessun IP dei visitatori trasmesso fuori. Licenza SIL OFL 1.1. */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("../fonts/fraunces-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("../fonts/fraunces-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/inter-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ---------- Design tokens (light) ---------- */
 :root {
   --bg:            #ffffff;
@@ -515,6 +567,35 @@ a.linkpill:hover {
 .footer__note { margin-right: auto; }
 .footer__top { text-decoration: none; font-weight: 550; transition: color .18s ease; }
 .footer__top:hover { color: var(--accent-text); }
+.footer__legal { text-decoration: none; transition: color .18s ease; }
+.footer__legal:hover { color: var(--accent-text); text-decoration: underline; }
+
+/* ---------- Pagina privacy ---------- */
+/* Testi lunghi: una versione per lingua nel markup, si mostra quella attiva.
+   Senza JS lang resta "it", quindi si vede comunque l'italiano. */
+html[lang="en"] .only-it, html:not([lang="en"]) .only-en { display: none; }
+
+.legal { max-width: 72ch; }
+.legal__updated { margin-top: 10px; font-size: 13.5px; color: var(--text-faint); }
+.legal h2 {
+  font-family: var(--font-display); font-size: 1.35rem; font-weight: 600;
+  margin: clamp(34px, 5vw, 46px) 0 12px;
+}
+.legal p, .legal li { color: var(--text-soft); }
+.legal p + p, .legal p + ul, .legal ul + p { margin-top: 12px; }
+.legal ul { list-style: disc; padding-left: 1.3em; }
+.legal li + li { margin-top: 6px; }
+.legal strong { color: var(--text); font-weight: 600; }
+.legal a { color: var(--accent-text); text-underline-offset: 2px; }
+.legal code {
+  font-family: var(--font-mono); font-size: .86em;
+  background: var(--bg-inset); border: 1px solid var(--line); border-radius: 6px; padding: 1px 5px;
+}
+.legal__table { overflow-x: auto; margin-block: 14px 18px; }
+.legal table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 520px; }
+.legal th, .legal td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.legal th { color: var(--text); font-weight: 600; background: var(--bg-alt); }
+.legal td { color: var(--text-soft); }
 
 /* ---------- Card larga: galleria pesca ---------- */
 .card--wide { grid-column: span 2; }

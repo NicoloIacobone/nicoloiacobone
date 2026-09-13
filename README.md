@@ -16,11 +16,18 @@ Realizzato in HTML/CSS/JS puro (nessun build step, nessuna dipendenza) e hostato
 - **Single page** con nav sticky, ancore, scrollspy e menu compatto su mobile.
 - **Responsive**: card che si impilano, immagini fluide, layout verificato da 390px in su.
 - Rispetta `prefers-reduced-motion` e resta leggibile anche con JavaScript disattivato.
+- **Privacy by design.** Nessun cookie, nessuna analytics, nessuna risorsa da terze parti: i font
+  (Fraunces, Inter, JetBrains Mono — SIL OFL 1.1) sono self-hosted in `fonts/`, così l'IP dei
+  visitatori non arriva a Google. L'unico storage è `localStorage` per tema e lingua (strumento
+  tecnico, niente banner). L'informativa è in `privacy.html`, linkata dal footer: se aggiungi
+  analytics, embed (YouTube, Maps…) o risorse esterne, va aggiornata e potrebbe servire un banner.
 
 ## Struttura
 
 ```
 index.html                     markup e contenuti (testi italiani inline come fallback)
+privacy.html                   informativa privacy e cookie (IT/EN nel markup)
+fonts/                         font self-hosted (woff2, subset latin + latin-ext)
 css/style.css                  design token, layout, responsive, tema chiaro/scuro
 js/main.js                     dizionario i18n, tema, nav mobile, scrollspy, mappa
 js/travels.js                  ← i paesi visitati e quelli in cui hai vissuto

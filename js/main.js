@@ -160,7 +160,12 @@
       'map.tipVisited': 'visitato',
 
       'footer.note': 'Costruito a mano in HTML, CSS e JavaScript. Nessun framework è stato maltrattato.',
-      'footer.top': 'Torna su ↑'
+      'footer.top': 'Torna su ↑',
+      'footer.privacy': 'Privacy e cookie',
+
+      'privacy.metaTitle': 'Privacy e cookie — Nicolò Iacobone',
+      'privacy.metaDescription': 'Informativa sulla privacy e sui cookie del sito www.nicoloiacobone.it.',
+      'privacy.backHome': '← Torna al sito'
     },
 
     en: {
@@ -299,7 +304,12 @@
       'map.tipLived': 'lived here',
       'map.tipVisited': 'visited',
       'footer.note': 'Hand-built with HTML, CSS and JavaScript. No framework was harmed.',
-      'footer.top': 'Back to top ↑'
+      'footer.top': 'Back to top ↑',
+      'footer.privacy': 'Privacy & cookies',
+
+      'privacy.metaTitle': 'Privacy & cookies — Nicolò Iacobone',
+      'privacy.metaDescription': 'Privacy and cookie policy of the website www.nicoloiacobone.it.',
+      'privacy.backHome': '← Back to the website'
     }
   };
 
