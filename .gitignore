@@ -29,3 +29,6 @@ yarn-error.log*
 # Screenshot WhatsApp originale del tatuaggio: contiene nome, foto profilo e
 # messaggio di una terza persona. Il sito usa il ritaglio imgs_and_docs/tatuaggio.jpeg
 imgs_and_docs/pesce_tatuaggio.jpeg
+
+# Appunti personali per il CV, non usati dal sito
+imgs_and_docs/CONTRIBUTIONS_SUMMARY.md
