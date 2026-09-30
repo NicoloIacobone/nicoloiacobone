@@ -123,7 +123,7 @@
         <div class="about__prose reveal">
           <p data-i18n="about.p1">Lavoro sulla ricostruzione 3D feed-forward e sulla comprensione semantica delle scene: in pratica, provo a far sì che un modello guardi una manciata di immagini e ne ricavi una scena tridimensionale coerente, con gli oggetti al posto giusto e riconosciuti come tali.</p>
           <p data-i18n="about.p2">Ho conseguito la laurea magistrale in Ingegneria Informatica (Artificial Intelligence and Data Analytics) al Politecnico di Torino con 108/110, svolgendo la tesi all'ETH di Zurigo. Da lì la collaborazione è continuata come Research Collaborator nel gruppo di Photogrammetry &amp; Remote Sensing dell'ETH, fino a settembre 2026.</p>
-          <p data-i18n="about.p3">Vivo a Bari, sono cittadino UE e sono disponibile a trasferirmi ovunque. Cerco posizioni di ricerca in industria o un dottorato nel campo della percezione 3D e del representation learning.</p>
+          <p data-i18n="about.p3">Vivo a Bari, sono cittadino UE e sono disponibile a trasferirmi ovunque. Cerco posizioni di ricerca o di ML engineering in industria, oppure un dottorato nel campo della percezione 3D e del representation learning.</p>
         </div>
 
         <ul class="about__stats reveal" style="--d:100ms">
@@ -163,8 +163,8 @@
             <p class="tl__org" data-i18n="research.exp1Org">Photogrammetry &amp; Remote Sensing (D-BAUG) · da remoto</p>
             <p class="tl__topic" data-i18n="research.exp1Topic">3D-Consistent Instance Segmentation on Frozen Feed-Forward Backbones</p>
             <ul class="tl__list">
-              <li data-i18n="research.exp1b1">Decoder in stile MaskDINO addestrato su un backbone VGGT-1B rigorosamente congelato, per segmentazione di istanze 3D coerente tra viste, con supervisione solo dalle annotazioni 2D di ScanNet v2. Il caching delle feature per scena ha ridotto il run a ~0,8 GPU-day contro i ~16 dei competitor.</li>
-              <li data-i18n="research.exp1b2">Set di query condiviso tra i bundle di viste: per costruzione una query segue una singola istanza attraverso tutti i frame, grazie a cross-frame attention e ancore 3D — i due meccanismi dominanti nell'ablation.</li>
+              <li data-i18n="research.exp1b1">Decoder in stile MaskDINO addestrato su un backbone VGGT-1B rigorosamente congelato, per segmentazione di istanze 3D coerente tra viste, con supervisione solo dalle annotazioni 2D di ScanNet v2. Il caching delle feature per scena ha ridotto il training a ~0,8 GPU-day, contro i ~16 delle due baseline pubblicate.</li>
+              <li data-i18n="research.exp1b2">Set di query condiviso tra i bundle di viste: per costruzione una query segue una singola istanza attraverso tutti i frame, grazie a cross-frame attention e ancore 3D, i due meccanismi dominanti nell'ablation.</li>
               <li data-i18n="research.exp1b3">Stack di training e valutazione costruito end to end: quattro adapter per i dataset (ScanNet v2, ScanNet++, Replica, Aria Synthetic Environments) e il bridge 2D→3D completamente unposed (Sim(3)+ICP, lifting delle maschere per voto), valutato con l'evaluator ufficiale e non modificato di ScanNet.</li>
               <li data-i18n="research.exp1b4">Sul benchmark ufficiale ScanNet 3D, unposed, class-agnostic, 50 viste: 0,053 / 0,170 / 0,542 (AP/AP50/AP25), davanti a FAST3DIS (0,038 / 0,096 / 0,316) e IGGT (0,028 / 0,112 / 0,287) su tutte e tre le metriche; entrambi i confronti sono zero-shot su ScanNet.</li>
               <li data-i18n="research.exp1b5">Curve di data scaling, ablazioni confrontate con la varianza misurata tra seed e transfer zero-shot su ScanNet200/ScanNet++/Replica hanno localizzato la perdita residua nel lifting 2D→3D, non nel decoder.</li>
@@ -186,8 +186,8 @@
             <p class="tl__org" data-i18n="research.exp2Org">In collaborazione con il Politecnico di Torino</p>
             <p class="tl__topic" data-i18n="research.exp2Topic">Towards Multi-View 3D Instance Segmentation via Semantic Distillation</p>
             <ul class="tl__list">
-              <li data-i18n="research.exp2b1">Framework di distillazione semantica: una testa DPT parallela su MapAnything regredisce le feature di un SAM2 congelato, sotto una loss di consistenza multi-vista geometry-aware (proiezione, occlusione via Z-buffer, pesatura per confidenza).</li>
-              <li data-i18n="research.exp2b2">Stack di training (unfreezing progressivo di DINOv2, bf16 AMP distribuito su SLURM) e strumenti di valutazione: estrazione shardata delle feature del teacher su COCO, feature dello student decodificate dal mask decoder di SAM2 stesso, visualizzazioni PCA con Rerun.</li>
+              <li data-i18n="research.exp2b1">Framework di distillazione semantica: una testa DPT parallela su MapAnything regredisce le feature di un SAM 2 congelato, sotto una loss di consistenza multi-vista geometry-aware (proiezione, occlusione via Z-buffer, pesatura per confidenza).</li>
+              <li data-i18n="research.exp2b2">Stack di training (unfreezing progressivo di DINOv2, bf16 AMP distribuito su SLURM) e strumenti di valutazione: estrazione shardata delle feature del teacher su COCO, feature dello student decodificate dal mask decoder di SAM 2 stesso, visualizzazioni PCA con Rerun.</li>
               <li data-i18n="research.exp2b3">Individuato un collo di bottiglia di capacità degli encoder geometrici nella regressione semantica fine-grained: il vincolo da cui è nato il progetto successivo.</li>
             </ul>
             <p class="tl__links">
@@ -197,7 +197,7 @@
               </a>
               <a class="linkpill" href="https://github.com/NicoloIacobone/sam2" target="_blank" rel="noopener">
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 19.2c-4 1.2-4-2.1-5.6-2.5m11.2 5.1v-3.2c0-.9.1-1.6-.5-2.2 2.8-.3 5.4-1.4 5.4-6a4.6 4.6 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 3.5 5.8 3.8 5.8 3.8a4.3 4.3 0 0 0-.1 3.2 4.6 4.6 0 0 0-1.3 3.3c0 4.5 2.6 5.6 5.4 5.9-.4.4-.6.9-.5 1.5v3.9"/></svg>
-                <span data-i18n="research.teacherLink">Fork del teacher SAM2</span>
+                <span data-i18n="research.teacherLink">Fork del teacher SAM 2</span>
               </a>
             </p>
           </div>
@@ -286,7 +286,7 @@
         <div class="skillgroup reveal" style="--d:60ms">
           <h4 class="skillgroup__name" data-i18n="research.sk2">Deep Learning</h4>
           <ul class="tags">
-            <li>DETR / Mask2Former / MaskDINO-family</li><li>Deformable attention</li><li>Hungarian matching</li><li data-i18n="research.sk2t4">Knowledge distillation</li><li data-i18n="research.sk2t5">Foundation model congelati (SAM2/3, Florence-2)</li><li data-i18n="research.sk2t7">Generazione di dati sintetici (Kubric)</li><li data-i18n="research.sk2t6">Modelli generativi (CVAE)</li>
+            <li>DETR / Mask2Former / MaskDINO-family</li><li>Deformable attention</li><li>Hungarian matching</li><li data-i18n="research.sk2t4">Knowledge distillation</li><li data-i18n="research.sk2t5">Foundation model congelati (SAM 2/3, Florence-2)</li><li data-i18n="research.sk2t7">Generazione di dati sintetici (Kubric)</li><li data-i18n="research.sk2t6">Modelli generativi (CVAE)</li>
           </ul>
         </div>
         <div class="skillgroup reveal" style="--d:120ms">
@@ -344,7 +344,7 @@
                  alt="Stemma Campione Grandioso di Clash Royale">
           </figure>
           <h3 class="card__title" data-i18n="beyond.c2Title">Campione Grandioso su Clash Royale</h3>
-          <p class="card__body" data-i18n="beyond.c2Body">Record personale: Campione Grandioso. Anni di ottimizzazione degli iperparametri del mazzo, valutazione rigorosa in condizioni avverse e una tolleranza al rumore statistico costruita partita dopo partita. Se volete verificare, il tag è pubblico.</p>
+          <p class="card__body" data-i18n="beyond.c2Body">Record personale: Campione Grandioso. Rientro nel 2–4% dei migliori giocatori attivi al mondo: anni di ottimizzazione degli iperparametri del mazzo, valutazione rigorosa in condizioni avverse e una tolleranza al rumore statistico costruita partita dopo partita. Se volete verificare, il tag è pubblico.</p>
           <p class="card__links">
             <span class="linkpill linkpill--static">
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 3.6 7.8 20.4M16.2 3.6l-1.6 16.8M3.8 8.8h16.4M3.2 15.2h16.4"/></svg>
@@ -388,7 +388,7 @@
             </figure>
           </div>
           <h3 class="card__title" data-i18n="beyond.c5Title">Pesca (con conseguenze permanenti)</h3>
-          <p class="card__body" data-i18n="beyond.c5Body">Alzarsi prima dell'alba per stare fermo su uno scoglio ad aspettare: dopo mesi passati a fissare curve di training, è terapia. Il mio primo pesce mi è piaciuto al punto che me lo sono fatto tatuare sull'avambraccio. Mia nonna ha commentato che «sembra un ricamo», e da allora non riesco più a vederlo diversamente.</p>
+          <p class="card__body" data-i18n="beyond.c5Body">Alzarsi prima dell'alba per stare fermo su uno scoglio ad aspettare: dopo mesi passati a fissare curve di training, è terapia. Pesco a bolognese e a fondo e sono completamente autonomo, dalla scelta dell'esca a tutti i nodi che servono. Il mio primo pesce mi è piaciuto al punto che me lo sono fatto tatuare sull'avambraccio. Mia nonna ha commentato che «sembra un ricamo», e da allora non riesco più a vederlo diversamente.</p>
         </article>
 
         <article class="card card--fun reveal" style="--d:300ms">
@@ -397,6 +397,22 @@
           </div>
           <h3 class="card__title" data-i18n="beyond.c3Title">So fare il giocoliere</h3>
           <p class="card__body" data-i18n="beyond.c3Body">Sì, davvero: tre palline in aria contemporaneamente. È l'unica forma di multitasking in cui riesco davvero bene, ed è sorprendentemente utile per spiegare cosa succede quando devi tenere traccia di più oggetti che si muovono nello spazio. Su richiesta, dimostrazione dal vivo.</p>
+        </article>
+
+        <article class="card card--fun reveal" style="--d:360ms">
+          <div class="card__icon" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3.2" y="4.4" width="17.6" height="11.2" rx="2.4"/><path d="m10.4 7.8 3.8 2.2-3.8 2.2z"/><path d="M3.2 19.6h17.6M8.6 17.8v3.6"/></svg>
+          </div>
+          <h3 class="card__title" data-i18n="beyond.c6Title">Montaggio: video, foto e musica</h3>
+          <p class="card__body" data-i18n="beyond.c6Body">Monto ed edito video, foto e musica: tagli, ritmo, ritocco e audio. È una pipeline di post-processing anche questa, solo che qui il ground truth è il gusto.</p>
+        </article>
+
+        <article class="card card--fun card--wide reveal" style="--d:420ms">
+          <div class="card__icon" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="6.6" y="6.6" width="10.8" height="10.8" rx="2"/><rect x="10" y="10" width="4" height="4" rx=".8"/><path d="M9.6 3.2v3.4M14.4 3.2v3.4M9.6 17.4v3.4M14.4 17.4v3.4M3.2 9.6h3.4M3.2 14.4h3.4M17.4 9.6h3.4M17.4 14.4h3.4"/></svg>
+          </div>
+          <h3 class="card__title" data-i18n="beyond.c7Title">Arduino, anche dalla cattedra</h3>
+          <p class="card__body" data-i18n="beyond.c7Body">Microcontrollori, sensori e breadboard: l'hardware è il posto in cui un bug si vede a occhio nudo, di solito perché qualcosa ha smesso di lampeggiare. Durante l'ultimo anno di magistrale a Torino ho anche tenuto un corso di orientamento su Arduino per i ragazzi delle superiori alle prese con la scelta dell'università.</p>
         </article>
       </div>
 
@@ -451,7 +467,7 @@
       <header class="section__head reveal">
         <p class="section__kicker" data-i18n="contact.kicker">04 — Contatti</p>
         <h2 class="section__title" data-i18n="contact.title">Parliamone</h2>
-        <p class="section__lead" data-i18n="contact.lead">Posizioni di ricerca in industria, dottorati, collaborazioni o semplicemente due parole sulla visione 3D: scrivetemi pure.</p>
+        <p class="section__lead" data-i18n="contact.lead">Posizioni di ricerca o di ML engineering in industria, dottorati, collaborazioni o semplicemente due parole sulla visione 3D: scrivetemi pure.</p>
       </header>
 
       <div class="contact__grid">
