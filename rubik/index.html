@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cubo di Rubik con la fotocamera — Nicolò Iacobone</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Scansiona un cubo di Rubik con la fotocamera e risolvilo mossa per mossa, tutto nel browser.">
+<meta name="author" content="Nicolò Iacobone">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://www.nicoloiacobone.it/rubik/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232f5bd8'/><text x='50' y='69' font-size='58' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'>NI</text></svg>">
+<link rel="preload" href="../fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="css/rubik.css">
+<script>
+/* Applica tema e lingua prima del primo paint per evitare il flash (come nella home) */
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+    var l = localStorage.getItem('lang');
+    if (!l) l = (navigator.language || 'it').toLowerCase().indexOf('it') === 0 ? 'it' : 'en';
+    document.documentElement.setAttribute('lang', l);
+  } catch (e) {}
+})();
+</script>
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+<header class="nav is-stuck">
+  <div class="nav__inner">
+    <a class="nav__brand" href="../">
+      <span class="nav__mark" aria-hidden="true">NI</span>
+      <span class="nav__brandtext">Nicolò Iacobone</span>
+    </a>
+
+    <div class="nav__tools">
+      <div class="langswitch" role="group" data-i18n-attr="aria-label" data-i18n="a11y.langGroup" aria-label="Lingua">
+        <button type="button" class="langswitch__btn" data-lang="it" aria-pressed="true">IT</button>
+        <button type="button" class="langswitch__btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+
+      <button type="button" class="iconbtn" id="themeToggle" data-i18n-attr="aria-label,title" data-i18n="a11y.theme" aria-label="Cambia tema" title="Cambia tema">
+        <svg class="icon icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.2v2.4M12 19.4v2.4M2.2 12h2.4M19.4 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+        <svg class="icon icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap rubik">
+
+  <section class="rubik__intro" id="intro">
+    <p class="section__kicker" data-i18n="intro.kicker">Progetto personale · doppelbot</p>
+    <h1 class="rubik__title" data-i18n="intro.title">Risolvi il cubo di Rubik con la fotocamera</h1>
+    <p class="section__lead" data-i18n="intro.lead">Mostra alla fotocamera le sei facce del cubo, in qualsiasi ordine: la pagina le riconosce, ricostruisce il cubo e ti guida alla soluzione una mossa alla volta.</p>
+    <ol class="rubik__steps">
+      <li data-i18n="intro.step1">Avvia la fotocamera e tieni il cubo ben illuminato.</li>
+      <li data-i18n="intro.step2">Mostra una faccia alla volta e tienila ferma finché il riquadro diventa verde.</li>
+      <li data-i18n="intro.step3">Dopo la sesta faccia segui le mosse, dal tuo punto di vista.</li>
+    </ol>
+    <p class="rubik__note" data-i18n="intro.note">Per ora è tarato sul mio cubo: caselle con l'interno scuro e il bordo colorato. Un cubo classico a tinta piena potrebbe non essere riconosciuto.</p>
+    <p class="rubik__privacy" data-i18n="intro.privacy">Le immagini restano sul tuo dispositivo: niente viene inviato né salvato.</p>
+    <div class="rubik__actions">
+      <button type="button" class="btn btn--primary" id="startButton" data-i18n="intro.start">Avvia la fotocamera</button>
+    </div>
+    <p class="rubik__load" id="loadStatus" role="status" aria-live="polite"></p>
+    <noscript><p class="rubik__load is-error">Serve JavaScript. / JavaScript is required.</p></noscript>
+  </section>
+
+  <section class="rubik__app" id="scanSection" hidden>
+    <div class="rubik__stage is-mirrored" id="stage">
+      <video id="video" playsinline muted></video>
+      <canvas id="overlay" aria-hidden="true"></canvas>
+    </div>
+    <div class="rubik__panel">
+      <h2 class="rubik__subtitle" data-i18n="scan.title">Scansione</h2>
+      <p class="rubik__status" id="scanMain" role="status" aria-live="polite"></p>
+      <p class="rubik__hint" id="scanHint"></p>
+      <p class="rubik__hint" id="scanWarn" hidden></p>
+      <p class="rubik__event" id="scanEvent" hidden></p>
+      <div class="net" id="net" role="img" data-i18n-attr="aria-label" data-i18n="scan.net" aria-label="Facce acquisite"></div>
+      <div class="rubik__actions">
+        <button type="button" class="btn btn--ghost" id="restartButton" data-i18n="scan.restart">Ricomincia</button>
+        <button type="button" class="btn btn--ghost" id="switchButton" data-i18n="scan.switch" hidden>Cambia fotocamera</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="rubik__guide" id="guideSection" hidden>
+    <h2 class="rubik__subtitle" data-i18n="guide.title">Soluzione</h2>
+    <p class="rubik__hint" data-i18n="guide.hold">Tieni il cubo con il verde verso di te e il bianco in alto: la fotocamera vede la faccia blu.</p>
+    <p class="rubik__status" id="guideStatus" role="status" aria-live="polite" hidden></p>
+
+    <div class="rubik__app">
+      <div class="rubik__camera" id="guideStage">
+        <p class="rubik__hint" id="guideCamera" hidden></p>
+      </div>
+
+      <div class="rubik__panel">
+        <div class="move" id="currentMove">
+          <svg class="move__icon" id="moveIcon" viewBox="-2.3 -2.3 4.6 4.6" aria-hidden="true">
+            <defs>
+              <marker id="arrowhead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#ffff00" stroke="#000" stroke-width="1"/>
+              </marker>
+            </defs>
+          </svg>
+          <div class="move__text">
+            <p class="move__label" data-i18n="guide.next">Prossima mossa</p>
+            <p class="move__name" id="moveName" aria-live="polite"></p>
+            <p class="move__description" id="moveText"></p>
+            <p class="move__count" id="moveCount"></p>
+          </div>
+        </div>
+
+        <div class="rubik__solved" id="solved" hidden>
+          <p class="move__name" data-i18n="guide.solved">Cubo risolto!</p>
+          <p data-i18n="guide.solvedText">Ottimo lavoro. Puoi mischiarlo e ricominciare con una nuova scansione.</p>
+        </div>
+
+        <p class="rubik__event" id="guideEvent" hidden></p>
+        <div class="rubik__actions">
+          <button type="button" class="btn btn--primary" id="doneButton" data-i18n="guide.done">Fatto</button>
+          <button type="button" class="btn btn--ghost" id="undoButton" data-i18n="guide.undo">Annulla l'ultima</button>
+          <button type="button" class="btn btn--ghost" id="modeButton">Conferma a mano</button>
+          <button type="button" class="btn btn--ghost" id="rescanButton" data-i18n="guide.rescan">Nuova scansione</button>
+        </div>
+        <p class="rubik__keys" data-i18n="guide.keys">Tasti: Spazio = fatto, Z = annulla, M = conferma automatica o a mano</p>
+        <ol class="moves" id="moveList"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="rubik__about">
+    <h2 class="rubik__subtitle" data-i18n="about.title">Come funziona</h2>
+    <ul class="rubik__list">
+      <li data-i18n="about.vision">Visione: ogni casella ha l'interno scuro, quindi la pagina cerca macchie scure quasi quadrate disposte a griglia 3×3 e ne legge il colore dai pixel più saturi. Il riferimento sono i centri del cubo stesso, così si adatta alla luce della stanza.</li>
+      <li data-i18n="about.state">Stato: le facce si riconoscono dal centro; la rotazione di ognuna è l'unica che rende il cubo risolvibile.</li>
+      <li data-i18n="about.solver">Soluzione: algoritmo two-phase di Kociemba, al massimo 22 mosse, calcolato nel browser.</li>
+      <li data-i18n="about.origin">È una funzione di doppelbot, il mio gemello digitale: un robot Unitree G1 simulato in ROS 2 che imita i movimenti visti dalla webcam.</li>
+      <li data-i18n="about.credits">Librerie: OpenCV.js (Apache-2.0) e cubejs (MIT), servite da questo sito.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="footer__copy">© 2026 Nicolò Iacobone</p>
+    <a class="footer__legal" href="../privacy.html" data-i18n="footer.privacy">Privacy</a>
+    <a class="footer__top" href="../" data-i18n="footer.back">Torna al sito</a>
+  </div>
+</footer>
+
+</body>
+</html>
