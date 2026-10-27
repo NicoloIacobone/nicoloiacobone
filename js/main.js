@@ -104,6 +104,9 @@
       'research.proj2Title': 'Synthetic Data Generation for AROL Closure Systems',
       'research.proj2Body': 'CVAE per la generazione di serie temporali sintetiche per singola macchina e singolo sensore, sviluppato con un partner industriale e integrato nel loro framework.',
       'research.slidesLink': 'Codice e slide',
+      'research.proj3Date': 'Giu 2022',
+      'research.proj3Title': 'HoloLens 2 – MRTK Solvers Playground',
+      'research.proj3Body': 'Applicazione di realtà mista per Microsoft HoloLens 2 sviluppata in Unity con il Mixed Reality Toolkit: un hand menu agganciato alla mano sinistra attiva cinque demo dei solver MRTK (Orbital, RadialView, Follow, InBetween, Directional), che posizionano gli ologrammi rispetto a testa, mani e raggi delle mani. Il modello 3D che segue lo sguardo è fatto a mano in Blender.',
 
       'research.skillsTitle': 'Competenze',
       'research.sk1': 'Computer Vision 3D',
@@ -119,10 +122,8 @@
       'research.sk3t3': 'Design sperimentale riproducibile, ablazioni e data-scaling',
       'research.sk3t5': 'Regression testing di codice di ricerca',
       'research.sk3t7': 'Build CUDA',
-      'research.sk4': 'Linguaggi',
+      'research.sk4': 'Linguaggi di programmazione',
       'research.sk4t1': 'Python (avanzato)',
-      'research.sk4t3': 'Italiano (madrelingua)',
-      'research.sk4t4': 'Inglese (fluente)',
 
       'beyond.kicker': '03 — Oltre la ricerca',
       'beyond.title': 'Quando il cluster sta ancora girando',
@@ -136,6 +137,8 @@
       'beyond.c3Body': 'Sì, davvero: tre palline in aria contemporaneamente. È l’unica forma di multitasking in cui riesco davvero bene, ed è sorprendentemente utile per spiegare cosa succede quando devi tenere traccia di più oggetti che si muovono nello spazio. Su richiesta, dimostrazione dal vivo.',
       'beyond.c6Title': 'Montaggio: video, foto e musica',
       'beyond.c6Body': 'Monto ed edito video, foto e musica: tagli, ritmo, ritocco e audio. È una pipeline di post-processing anche questa, solo che qui il ground truth è il gusto.',
+      'beyond.c8Title': 'So risolvere il cubo di Rubik',
+      'beyond.c8Body': 'Sei facce, 43 miliardi di miliardi di configurazioni possibili e un solo stato corretto. Lo risolvo con una sequenza di algoritmi imparati a memoria: la prova tascabile che anche uno spazio di ricerca enorme si doma, se applichi le mosse giuste nell’ordine giusto.',
       'beyond.c7Title': 'Arduino, anche dalla cattedra',
       'beyond.c7Body': 'Microcontrollori, sensori e breadboard: l’hardware è il posto in cui un bug si vede a occhio nudo, di solito perché qualcosa ha smesso di lampeggiare. Durante l’ultimo anno di magistrale a Torino ho anche tenuto un corso di orientamento su Arduino per i ragazzi delle superiori alle prese con la scelta dell’università.',
 
@@ -261,6 +264,9 @@
       'research.proj2Title': 'Synthetic Data Generation for AROL Closure Systems',
       'research.proj2Body': 'CVAE for per-machine, per-sensor synthetic time series, developed with an industrial partner and integrated into their framework.',
       'research.slidesLink': 'Code & slides',
+      'research.proj3Date': 'Jun 2022',
+      'research.proj3Title': 'HoloLens 2 – MRTK Solvers Playground',
+      'research.proj3Body': 'Mixed-reality app for Microsoft HoloLens 2, built in Unity with the Mixed Reality Toolkit: a hand menu attached to the left hand switches between five demos of MRTK solvers (Orbital, RadialView, Follow, InBetween, Directional), which position holograms relative to the head, the hands and the hand rays. The 3D model that follows your gaze was made by hand in Blender.',
 
       'research.skillsTitle': 'Skills',
       'research.sk1': '3D Computer Vision',
@@ -276,10 +282,8 @@
       'research.sk3t3': 'Reproducible experiment design, ablations & data-scaling',
       'research.sk3t5': 'Regression testing of research code',
       'research.sk3t7': 'CUDA builds',
-      'research.sk4': 'Languages',
+      'research.sk4': 'Programming languages',
       'research.sk4t1': 'Python (advanced)',
-      'research.sk4t3': 'Italian (native)',
-      'research.sk4t4': 'English (proficient)',
 
       'beyond.kicker': '03 — Beyond research',
       'beyond.title': 'While the cluster is still running',
@@ -293,6 +297,8 @@
       'beyond.c3Body': 'Yes, really: three balls in the air at once. It is the only kind of multitasking I am genuinely good at, and it is surprisingly handy for explaining what happens when you have to keep track of several objects moving through space. Live demo available on request.',
       'beyond.c6Title': 'Editing: video, photo and music',
       'beyond.c6Body': 'I cut and edit video, photos and music: cuts, pacing, retouching and audio. It is a post-processing pipeline too, except that here the ground truth is taste.',
+      'beyond.c8Title': 'I can solve a Rubik’s cube',
+      'beyond.c8Body': 'Six faces, 43 quintillion possible configurations and only one correct state. I solve it with a sequence of memorised algorithms: pocket-sized proof that even a huge search space can be tamed if you apply the right moves in the right order.',
       'beyond.c7Title': 'Arduino, from the teaching side too',
       'beyond.c7Body': 'Microcontrollers, sensors and breadboards: hardware is where a bug is visible to the naked eye, usually because something has stopped blinking. During the final year of my MSc in Turin I also taught an Arduino orientation course for high-school students choosing their university.',
 

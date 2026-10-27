@@ -52,6 +52,7 @@ window.TRAVELS = {
     'IT',   // Italia
     'LU',   // Lussemburgo
     'MT',   // Malta
+    'MA',   // Marocco
     'NL',   // Paesi Bassi
     'NO',   // Norvegia
     'PL',   // Polonia
