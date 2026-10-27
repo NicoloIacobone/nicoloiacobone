@@ -106,7 +106,7 @@
       'research.slidesLink': 'Codice e slide',
       'research.proj3Date': 'Giu 2022',
       'research.proj3Title': 'HoloLens 2 – MRTK Solvers Playground',
-      'research.proj3Body': 'Applicazione di realtà mista per Microsoft HoloLens 2 sviluppata in Unity con il Mixed Reality Toolkit: un hand menu agganciato alla mano sinistra attiva cinque demo dei solver MRTK (Orbital, RadialView, Follow, InBetween, Directional), che posizionano gli ologrammi rispetto a testa, mani e raggi delle mani. Il modello 3D che segue lo sguardo è fatto a mano in Blender.',
+      'research.proj3Body': 'App di realtà mista per HoloLens 2 in Unity e MRTK: un hand menu sulla mano attiva cinque demo dei solver che posizionano gli ologrammi rispetto a testa e mani.',
 
       'research.skillsTitle': 'Competenze',
       'research.sk1': 'Computer Vision 3D',
@@ -266,7 +266,7 @@
       'research.slidesLink': 'Code & slides',
       'research.proj3Date': 'Jun 2022',
       'research.proj3Title': 'HoloLens 2 – MRTK Solvers Playground',
-      'research.proj3Body': 'Mixed-reality app for Microsoft HoloLens 2, built in Unity with the Mixed Reality Toolkit: a hand menu attached to the left hand switches between five demos of MRTK solvers (Orbital, RadialView, Follow, InBetween, Directional), which position holograms relative to the head, the hands and the hand rays. The 3D model that follows your gaze was made by hand in Blender.',
+      'research.proj3Body': 'Mixed-reality app for HoloLens 2 in Unity and MRTK: a hand menu switches between five demos of solvers that position holograms relative to the head and hands.',
 
       'research.skillsTitle': 'Skills',
       'research.sk1': '3D Computer Vision',
