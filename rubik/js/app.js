@@ -25,6 +25,11 @@ const COLOR_WARN = "rgb(255, 40, 40)";
 const NET_LAYOUT = { U: [1, 0], L: [0, 1], F: [1, 1], R: [2, 1], B: [3, 1], D: [1, 2] };
 
 const $ = (id) => document.getElementById(id);
+/** Porta in vista una sezione; in modalità app (telefoni) le sezioni sono già a tutto schermo e non si scorre. */
+function reveal(section) {
+  if (getComputedStyle(section).position === "fixed") window.scrollTo(0, 0);
+  else section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 const rgb = ([r, g, b]) => `rgb(${r}, ${g}, ${b})`;
 const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
@@ -35,7 +40,7 @@ const ui = {
   scan: $("scanSection"),
   stage: $("stage"),
   video: $("video"),
-  overlay: $("overlay"),
+  view: $("view"),
   scanMain: $("scanMain"),
   scanHint: $("scanHint"),
   scanWarn: $("scanWarn"),
@@ -61,9 +66,9 @@ const ui = {
   rescan: $("rescanButton"),
 };
 
-const work = document.createElement("canvas");
-const workContext = work.getContext("2d", { willReadFrequently: true });
-const overlayContext = ui.overlay.getContext("2d");
+// Un solo canvas: il fotogramma analizzato e, sopra, la faccia trovata. Così disegno e video coincidono
+// sempre (sugli iPhone il ritaglio del <video> fatto dal browser non era quello del fotogramma analizzato).
+const viewContext = ui.view.getContext("2d", { willReadFrequently: true });
 
 let cv = null;
 let solver = null;
@@ -162,6 +167,7 @@ async function start() {
     }
     showLoad(null);
     startScan();
+    reveal(ui.scan);
   } finally {
     ui.start.disabled = false;
   }
@@ -175,6 +181,7 @@ function startScan() {
   face = null;
   scanEvent = null;
   ui.scan.prepend(ui.stage);
+  document.documentElement.classList.add("is-running");
   ui.intro.hidden = true;
   ui.guide.hidden = true;
   ui.scan.hidden = false;
@@ -211,13 +218,12 @@ function frameGeometry(videoWidth, videoHeight) {
 
 function processFrame(video) {
   const g = frameGeometry(video.videoWidth, video.videoHeight);
-  if (work.width !== g.width || work.height !== g.height) {
-    [work.width, work.height] = [g.width, g.height];
-    [ui.overlay.width, ui.overlay.height] = [g.width, g.height];
+  if (ui.view.width !== g.width || ui.view.height !== g.height) {
+    [ui.view.width, ui.view.height] = [g.width, g.height];
     ui.stage.style.aspectRatio = `${g.width} / ${g.height}`;
   }
-  workContext.drawImage(video, g.sx, g.sy, g.sw, g.sh, 0, 0, g.width, g.height);
-  const rgba = cv.matFromImageData(workContext.getImageData(0, 0, g.width, g.height));
+  viewContext.drawImage(video, g.sx, g.sy, g.sw, g.sh, 0, 0, g.width, g.height);
+  const rgba = cv.matFromImageData(viewContext.getImageData(0, 0, g.width, g.height));
   frameMats ??= [new cv.Mat(), new cv.Mat()];
   const [frame, lab] = frameMats;
   cv.cvtColor(rgba, frame, cv.COLOR_RGBA2RGB);
@@ -276,10 +282,9 @@ function onScanEvent(code) {
   scanEvent = { key: code === "captured" ? "scan.captured" : "scan.updated", params: { letter, n: scan.captures.length } };
 }
 
-/** Faccia trovata: contorno da giallo (in lettura) a verde (`progress` 1), pallini col colore letto, X sulle coperte. */
+/** Sopra il fotogramma: contorno della faccia da giallo (in lettura) a verde (`progress` 1), pallini col colore letto, X sulle coperte. */
 function drawOverlay(progress) {
-  const context = overlayContext;
-  context.clearRect(0, 0, ui.overlay.width, ui.overlay.height);
+  const context = viewContext;
   if (face === null) return;
   const mix = COLOR_OK.map((c, i) => Math.round(c * progress + COLOR_READING[i] * (1 - progress)));
   context.lineJoin = "round";
@@ -399,7 +404,6 @@ async function startGuide(state) {
   const names = scan.names;
   references = Object.fromEntries(scan.captures.map((capture, k) => [names[k], capture.labs[4]]));
   face = null;
-  overlayContext.clearRect(0, 0, ui.overlay.width, ui.overlay.height);
   ui.guideStage.prepend(ui.stage);
   ui.scan.hidden = true;
   ui.guide.hidden = false;
@@ -408,8 +412,8 @@ async function startGuide(state) {
   history = [];
   guideEvent = null;
   guide = new Guide((s) => solver.solve(s));
+  reveal(ui.guide);
   await updateGuide();
-  ui.guide.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function updateGuide() {
@@ -558,6 +562,18 @@ ui.switchCamera.addEventListener("click", async () => {
     scanEvent = { key, params, warn: true };
   }
 });
+/** Torna alla pagina: fotocamera spenta, scansione e guida chiuse. */
+function exitApp() {
+  phase = "intro";
+  stopCamera();
+  ui.scan.hidden = true;
+  ui.guide.hidden = true;
+  ui.intro.hidden = false;
+  document.documentElement.classList.remove("is-running");
+  ui.intro.scrollIntoView({ block: "start" });
+}
+
+document.querySelectorAll("[data-exit]").forEach((button) => button.addEventListener("click", exitApp));
 ui.done.addEventListener("click", () => {
   guideEvent = null;
   confirmMove();
@@ -571,9 +587,10 @@ ui.rescan.addEventListener("click", async () => {
   try {
     if (!stream) await startCamera();
     startScan();
-    ui.scan.scrollIntoView({ behavior: "smooth", block: "start" });
+    reveal(ui.scan);
   } catch (exc) {
     ui.intro.hidden = false;
+    document.documentElement.classList.remove("is-running");
     const [key, params] = exc.key ? [exc.key, {}] : cameraError(exc);
     showLoad(key, params, true);
   } finally {

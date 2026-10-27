@@ -51,12 +51,11 @@
   aspect-ratio: 4 / 3; border-radius: var(--radius-lg);
   background: #000; box-shadow: var(--shadow-md);
 }
-.rubik__stage video, .rubik__stage canvas {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-}
-.rubik__stage video { object-fit: cover; }
-/* Il disegno è nelle coordinate del fotogramma NON specchiato: si specchia insieme al video. */
-.rubik__stage.is-mirrored video, .rubik__stage.is-mirrored canvas { transform: scaleX(-1); }
+.rubik__stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+/* Fotogramma e disegno sono NON specchiati: il canvas si specchia tutto insieme. */
+.rubik__stage.is-mirrored canvas { transform: scaleX(-1); }
+/* Il video serve solo da sorgente: resta nella pagina (Safari non aggiorna un video tolto o display:none). */
+.rubik__source { position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
 .rubik__status { font-weight: 600; font-size: 1.05rem; }
 .rubik__hint { margin-top: 6px; color: var(--text-soft); font-size: .95rem; }
@@ -117,7 +116,67 @@
 @media (max-width: 820px) {
   .rubik__app { grid-template-columns: 1fr; }
 }
-@media (max-width: 420px) {
-  :root { --net-cell: 14px; }
-  .move__icon { width: 128px; height: 128px; }
+
+/* ---------- Modalità app (telefoni): scansione e guida a tutto schermo, comandi sempre visibili ---------- */
+@media (max-width: 820px), (max-height: 520px) {
+  html.is-running, html.is-running body { overflow: hidden; }
+  .rubik__screen:not([hidden]) {
+    position: fixed; inset: 0; z-index: 200; margin: 0;
+    display: flex; flex-direction: column; align-items: stretch; gap: 10px;
+    height: 100vh; height: 100dvh;
+    padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+             max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    background: var(--bg);
+  }
+  .rubik__screen .rubik__subtitle, .rubik__screen .rubik__keys { display: none; }
+  /* Il video prende tutto lo spazio che resta; il fotogramma ci sta dentro intero. */
+  .rubik__screen .rubik__stage {
+    flex: 1 1 0; min-height: 0; aspect-ratio: auto !important;
+    border-radius: var(--radius); box-shadow: none;
+  }
+  .rubik__screen .rubik__status { font-size: .98rem; line-height: 1.4; }
+  .rubik__screen .rubik__hint { margin-top: 3px; font-size: .86rem; line-height: 1.4; }
+  .rubik__screen .rubik__event { margin-top: 4px; font-size: .78rem; }
+  .rubik__screen .rubik__actions { margin-top: 10px; gap: 8px; }
+  .rubik__screen .btn {
+    flex: 1 1 0; min-width: 0; justify-content: center;
+    padding: 10px 10px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .rubik__screen .btn:hover { transform: none; }
+
+  /* Scansione: messaggi a sinistra, croce delle facce a destra, pulsanti sotto. */
+  .rubik__panel--scan { flex: none; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; align-items: start; }
+  .rubik__panel--scan .rubik__messages { grid-column: 1; grid-row: 1; }
+  .rubik__panel--scan .net { grid-column: 2; grid-row: 1; margin-top: 2px; gap: 1px; --net-cell: 10px; }
+  .rubik__panel--scan .rubik__actions { grid-column: 1 / -1; flex-wrap: nowrap; }
+
+  /* Guida: video sopra (se la conferma è automatica), mossa e pulsanti sotto. */
+  .rubik__guidehead { flex: none; }
+  .rubik__guidehead .rubik__hint { margin-top: 0; }
+  .rubik__guide .rubik__app { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin-top: 0; }
+  .rubik__camera { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
+  .rubik__camera .rubik__hint { flex: none; margin-top: 6px; }
+  .rubik__guide .rubik__panel { flex: none; }
+  .rubik__guide.is-manual .rubik__app { justify-content: center; }
+  .move { flex-wrap: nowrap; gap: 14px; padding: 10px 12px; border-radius: var(--radius); }
+  .move__icon { width: 84px; height: 84px; }
+  .move__label { display: none; }
+  .move__name { font-size: 2rem; margin: 0; }
+  .move__description { font-size: .92rem; line-height: 1.35; }
+  .move__count { margin-top: 2px; font-size: .8rem; }
+  .rubik__solved { padding: 12px 14px; border-radius: var(--radius); }
+  .rubik__guide .rubik__event { margin-top: 8px; }
+  .rubik__guide .rubik__actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .rubik__guide .rubik__actions #doneButton { grid-column: 1 / -1; }
+  .moves { flex-wrap: nowrap; overflow-x: auto; margin-top: 8px; scrollbar-width: none; }
+  .moves li { flex: none; }
+}
+
+/* Telefono in orizzontale: video a sinistra, il resto a destra. */
+@media (orientation: landscape) and (max-height: 520px) {
+  #scanSection:not([hidden]) { flex-direction: row; }
+  .rubik__panel--scan { width: 44%; overflow-y: auto; }
+  .rubik__guide .rubik__app { flex-direction: row; }
+  .rubik__guide .rubik__panel { width: 50%; overflow-y: auto; }
+  .rubik__guidehead .rubik__hint { display: none; }
 }

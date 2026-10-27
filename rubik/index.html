@@ -70,29 +70,36 @@
     <noscript><p class="rubik__load is-error">Serve JavaScript. / JavaScript is required.</p></noscript>
   </section>
 
-  <section class="rubik__app" id="scanSection" hidden>
+  <!-- Sorgente nascosta: si vede il canvas con il fotogramma analizzato e la griglia disegnata sopra. -->
+  <video class="rubik__source" id="video" playsinline muted aria-hidden="true"></video>
+
+  <section class="rubik__app rubik__screen" id="scanSection" hidden>
     <div class="rubik__stage is-mirrored" id="stage">
-      <video id="video" playsinline muted></video>
-      <canvas id="overlay" aria-hidden="true"></canvas>
+      <canvas id="view" aria-hidden="true"></canvas>
     </div>
-    <div class="rubik__panel">
+    <div class="rubik__panel rubik__panel--scan">
       <h2 class="rubik__subtitle" data-i18n="scan.title">Scansione</h2>
-      <p class="rubik__status" id="scanMain" role="status" aria-live="polite"></p>
-      <p class="rubik__hint" id="scanHint"></p>
-      <p class="rubik__hint" id="scanWarn" hidden></p>
-      <p class="rubik__event" id="scanEvent" hidden></p>
+      <div class="rubik__messages">
+        <p class="rubik__status" id="scanMain" role="status" aria-live="polite"></p>
+        <p class="rubik__hint" id="scanHint"></p>
+        <p class="rubik__hint" id="scanWarn" hidden></p>
+        <p class="rubik__event" id="scanEvent" hidden></p>
+      </div>
       <div class="net" id="net" role="img" data-i18n-attr="aria-label" data-i18n="scan.net" aria-label="Facce acquisite"></div>
       <div class="rubik__actions">
         <button type="button" class="btn btn--ghost" id="restartButton" data-i18n="scan.restart">Ricomincia</button>
         <button type="button" class="btn btn--ghost" id="switchButton" data-i18n="scan.switch" hidden>Cambia fotocamera</button>
+        <button type="button" class="btn btn--ghost" data-exit data-i18n="app.exit">Esci</button>
       </div>
     </div>
   </section>
 
-  <section class="rubik__guide" id="guideSection" hidden>
-    <h2 class="rubik__subtitle" data-i18n="guide.title">Soluzione</h2>
-    <p class="rubik__hint" data-i18n="guide.hold">Tieni il cubo con il verde verso di te e il bianco in alto: la fotocamera vede la faccia blu.</p>
-    <p class="rubik__status" id="guideStatus" role="status" aria-live="polite" hidden></p>
+  <section class="rubik__guide rubik__screen" id="guideSection" hidden>
+    <div class="rubik__guidehead">
+      <h2 class="rubik__subtitle" data-i18n="guide.title">Soluzione</h2>
+      <p class="rubik__hint" data-i18n="guide.hold">Tieni il cubo con il verde verso di te e il bianco in alto: la fotocamera vede la faccia blu.</p>
+      <p class="rubik__status" id="guideStatus" role="status" aria-live="polite" hidden></p>
+    </div>
 
     <div class="rubik__app">
       <div class="rubik__camera" id="guideStage">
@@ -127,6 +134,7 @@
           <button type="button" class="btn btn--ghost" id="undoButton" data-i18n="guide.undo">Annulla l'ultima</button>
           <button type="button" class="btn btn--ghost" id="modeButton">Conferma a mano</button>
           <button type="button" class="btn btn--ghost" id="rescanButton" data-i18n="guide.rescan">Nuova scansione</button>
+          <button type="button" class="btn btn--ghost" data-exit data-i18n="app.exit">Esci</button>
         </div>
         <p class="rubik__keys" data-i18n="guide.keys">Tasti: Spazio = fatto, Z = annulla, M = conferma automatica o a mano</p>
         <ol class="moves" id="moveList"></ol>
