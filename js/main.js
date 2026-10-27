@@ -36,6 +36,7 @@
       'nav.research': 'Ricerca',
       'nav.beyond': 'Oltre la ricerca',
       'nav.contact': 'Contatti',
+      'nav.rubik': 'Cubo di Rubik',
 
       'hero.badge': 'ETH Zürich · Photogrammetry & Remote Sensing',
       'hero.role': 'Computer Vision & 3D Deep Learning Researcher',
@@ -138,6 +139,7 @@
       'beyond.c6Title': 'Montaggio: video, foto e musica',
       'beyond.c6Body': 'Monto ed edito video, foto e musica: tagli, ritmo, ritocco e audio. È una pipeline di post-processing anche questa, solo che qui il ground truth è il gusto.',
       'beyond.c8Title': 'So risolvere il cubo di Rubik',
+      'beyond.c8Link': 'Prova il risolutore con la fotocamera',
       'beyond.c8Body': 'Sei facce, 43 miliardi di miliardi di configurazioni possibili e un solo stato corretto. Lo risolvo con una sequenza di algoritmi imparati a memoria: la prova tascabile che anche uno spazio di ricerca enorme si doma, se applichi le mosse giuste nell’ordine giusto.',
       'beyond.c7Title': 'Arduino, anche dalla cattedra',
       'beyond.c7Body': 'Microcontrollori, sensori e breadboard: l’hardware è il posto in cui un bug si vede a occhio nudo, di solito perché qualcosa ha smesso di lampeggiare. Durante l’ultimo anno di magistrale a Torino ho anche tenuto un corso di orientamento su Arduino per i ragazzi delle superiori alle prese con la scelta dell’università.',
@@ -196,6 +198,7 @@
       'nav.research': 'Research',
       'nav.beyond': 'Beyond research',
       'nav.contact': 'Contact',
+      'nav.rubik': 'Rubik’s cube',
 
       'hero.badge': 'ETH Zürich · Photogrammetry & Remote Sensing',
       'hero.role': 'Computer Vision & 3D Deep Learning Researcher',
@@ -298,6 +301,7 @@
       'beyond.c6Title': 'Editing: video, photo and music',
       'beyond.c6Body': 'I cut and edit video, photos and music: cuts, pacing, retouching and audio. It is a post-processing pipeline too, except that here the ground truth is taste.',
       'beyond.c8Title': 'I can solve a Rubik’s cube',
+      'beyond.c8Link': 'Try the camera solver',
       'beyond.c8Body': 'Six faces, 43 quintillion possible configurations and only one correct state. I solve it with a sequence of memorised algorithms: pocket-sized proof that even a huge search space can be tamed if you apply the right moves in the right order.',
       'beyond.c7Title': 'Arduino, from the teaching side too',
       'beyond.c7Body': 'Microcontrollers, sensors and breadboards: hardware is where a bug is visible to the naked eye, usually because something has stopped blinking. During the final year of my MSc in Turin I also taught an Arduino orientation course for high-school students choosing their university.',

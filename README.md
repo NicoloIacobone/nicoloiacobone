@@ -13,7 +13,8 @@ Realizzato in HTML/CSS/JS puro (nessun build step, nessuna dipendenza) e hostato
 - **Tema chiaro di default, dark mode opzionale.** Al primo caricamento si segue
   `prefers-color-scheme`; lo switch manuale sovrascrive e persiste in `localStorage`.
   Il tema è applicato prima del primo paint per evitare il flash.
-- **Single page** con nav sticky, ancore, scrollspy e menu compatto su mobile.
+- **Single page** con nav sticky, ancore, scrollspy e menu compatto su mobile, più la pagina
+  `rubik/` (risolutore del cubo di Rubik con la fotocamera).
 - **Responsive**: card che si impilano, immagini fluide, layout verificato da 390px in su.
 - Rispetta `prefers-reduced-motion` e resta leggibile anche con JavaScript disattivato.
 - **Privacy by design.** Nessun cookie, nessuna analytics, nessuna risorsa da terze parti: i font
@@ -38,10 +39,16 @@ imgs_and_docs/campione_grandioso.png
 imgs_and_docs/pesce_foto.jpeg
 imgs_and_docs/tatuaggio.jpeg
 imgs_and_docs/shrek2.jpg       locandina del film preferito
+rubik/                         ← copiata da doppelbot (web/rubik, `sh web/publish.sh`): non si modifica qui
+rubik/vendor/                  OpenCV.js (Apache-2.0) e cubejs (MIT), con le loro licenze
 CNAME                          dominio personalizzato
 ```
 
 Tutti gli asset (immagini e PDF) stanno in `imgs_and_docs/`.
+
+La pagina `rubik/` usa la fotocamera solo nel browser: le immagini non lasciano il dispositivo
+(vedi `privacy.html`, sezione 3). Usa `css/style.css` e i font del sito; i suoi testi IT/EN
+stanno in `rubik/js/i18n.js`.
 
 ## Sviluppo
 
