@@ -6,6 +6,10 @@
 // almeno MIN_CELLS di grandezza simile disposte a reticolo 3x3: le caselle mancanti (coperte da un
 // dito) si ricostruiscono dal reticolo, che tiene conto anche della prospettiva.
 //
+// Se così non si trova una faccia, si prova con il cubo classico: adesivi pieni e chiari separati
+// dalla plastica nera. Si cercano allora le macchie chiare e piene (senza buchi grandi: esclude i
+// bordi colorati del cubo in carbonio, che hanno l'interno scuro), con lo stesso reticolo.
+//
 // Le caselle escono riga per riga come appaiono nel fotogramma NON specchiato: le colonne vanno
 // verso il lato del reticolo più vicino alla destra dell'immagine, le righe verso quello più vicino
 // al basso. Una faccia ruotata di 90° esce quindi ruotata di 90°: la rotazione vera si ricava dopo,
@@ -14,10 +18,15 @@
 // `cv` è il modulo OpenCV.js già inizializzato; i fotogrammi sono cv.Mat RGB (CV_8UC3).
 // Gli arrotondamenti seguono numpy (metà al pari) e LAPACK, così i risultati coincidono col Python.
 
-import { colorMask, median } from "./cube-scan.js";
+import { SATURATED_FRACTION, STICKER_SATURATED_FRACTION, colorMask, median } from "./cube-scan.js";
 
 export const DARK_THRESHOLDS = [45, 65, 85, 105, 125]; // soglie sul canale più luminoso di ogni pixel (max di R, G, B)
+// Adesivi pieni: anche soglie più alte, dove il bordo nero sottile tra un adesivo e la mano che tiene il
+// cubo (sfocato, quindi grigio) conta ancora come scuro e li separa.
+export const STICKER_THRESHOLDS = [...DARK_THRESHOLDS, 145, 165];
 export const SIDE_RANGE = [0.02, 0.16]; // lato dell'interno di una casella rispetto al lato corto dell'immagine
+export const STICKER_SIDE_RANGE = [0.02, 0.24]; // cubo classico: lato dell'adesivo, che occupa quasi tutta la casella
+export const MAX_HOLES = 0.15; // adesivo pieno: buchi (scritte del logo, riflessi) al massimo il 15% della sua area
 export const MAX_ASPECT = 1.6; // rapporto massimo tra i lati: oltre è una faccia vista troppo di taglio
 export const MIN_FILL = 0.7; // area / rettangolo che la contiene: quadrati arrotondati ~0.9, cerchio del centro ~0.79
 export const MIN_SOLIDITY = 0.88; // area / inviluppo convesso: scarta forme frastagliate
@@ -31,6 +40,9 @@ export const MIN_CELLS = 6; // caselle vere necessarie per accettare una faccia
 export const MAX_OUTSIDE = 2; // caselle allineate fuori dal 3x3 oltre le quali la faccia è ambigua
 export const OUTSIDE_TOLERANCE = 0.4; // più larga di LATTICE_TOLERANCE: alla piega tra due facce il reticolo si storce
 export const SAMPLE_FRACTION = 0.8; // parte di ogni casella da cui leggere il colore (bordo dell'adesivo compreso)
+
+export const KIND_DARK = "interno scuro"; // caselle con l'interno scuro (cubo in carbonio)
+export const KIND_STICKER = "adesivo pieno"; // adesivi pieni su plastica nera (cubo classico)
 
 /** Arrotondamento di numpy (np.round): a metà va al pari. */
 function roundHalfEven(x) {
@@ -78,11 +90,28 @@ function projector(m) {
     });
 }
 
-/** Macchie scure quasi quadrate della grandezza di una casella, a tutte le soglie (senza doppioni). */
-export function findBlobs(cv, frame) {
+/** Area totale dei buchi di un contorno esterno (i suoi figli in RETR_CCOMP, uno dopo l'altro). */
+function holesArea(cv, contours, hierarchy, child) {
+  let total = 0;
+  while (child !== -1) {
+    const hole = contours.get(child);
+    total += cv.contourArea(hole);
+    hole.delete();
+    child = hierarchy.data32S[4 * child];
+  }
+  return total;
+}
+
+/**
+ * Macchie quasi quadrate della grandezza di una casella, a tutte le soglie (senza doppioni).
+ *
+ * sticker false: macchie scure (interni delle caselle). sticker true: macchie chiare e piene (adesivi).
+ */
+export function findBlobs(cv, frame, sticker = false) {
   const { rows: height, cols: width } = frame;
   const short = Math.min(width, height);
-  const [minArea, maxArea] = [(SIDE_RANGE[0] * short) ** 2, (SIDE_RANGE[1] * short) ** 2];
+  const sideRange = sticker ? STICKER_SIDE_RANGE : SIDE_RANGE;
+  const [minArea, maxArea] = [(sideRange[0] * short) ** 2, (sideRange[1] * short) ** 2];
   const maxChannel = new cv.Mat(height, width, cv.CV_8UC1);
   const rgb = frame.data;
   for (let i = 0, n = width * height; i < n; i++) {
@@ -94,11 +123,15 @@ export function findBlobs(cv, frame) {
   const dark = new cv.Mat();
   const mask = new cv.Mat();
   const blobs = [];
-  for (const threshold of DARK_THRESHOLDS) {
+  for (const threshold of sticker ? STICKER_THRESHOLDS : DARK_THRESHOLDS) {
     // brightness < threshold (valori interi): 1 dove è più scuro della soglia.
     cv.threshold(brightness, dark, threshold - 1, 1, cv.THRESH_BINARY_INV);
     cv.morphologyEx(dark, mask, cv.MORPH_CLOSE, kernel);
-    // Solo i contorni esterni delle macchie scure (anche se stanno dentro il buco di un'altra,
+    if (sticker) {
+      // Il chiaro: gli adesivi, separati dalla plastica nera (1 - maschera, valori 0/1).
+      cv.threshold(mask, mask, 0, 1, cv.THRESH_BINARY_INV);
+    }
+    // Solo i contorni esterni delle macchie (anche se stanno dentro il buco di un'altra,
     // come l'interno di una casella davanti ai capelli), non i bordi dei buchi.
     const contours = new cv.MatVector();
     const hierarchy = new cv.Mat();
@@ -106,7 +139,8 @@ export function findBlobs(cv, frame) {
     for (let n = 0; n < contours.size(); n++) {
       if (hierarchy.data32S[4 * n + 3] !== -1) continue;
       const contour = contours.get(n);
-      const blob = shapeOf(cv, contour, minArea, maxArea);
+      const holes = sticker ? (area) => holesArea(cv, contours, hierarchy, hierarchy.data32S[4 * n + 2]) > MAX_HOLES * area : null;
+      const blob = shapeOf(cv, contour, minArea, maxArea, holes);
       contour.delete();
       if (blob) blobs.push(blob);
     }
@@ -125,10 +159,14 @@ export function findBlobs(cv, frame) {
   return kept;
 }
 
-/** [punteggio, {center, side}] se il contorno ha la forma dell'interno di una casella, altrimenti null. */
-function shapeOf(cv, contour, minArea, maxArea) {
+/**
+ * [punteggio, {center, side}] se il contorno ha la forma di una casella, altrimenti null.
+ * `tooHoley(area)`, per gli adesivi pieni, dice se i buchi del contorno sono troppi.
+ */
+function shapeOf(cv, contour, minArea, maxArea, tooHoley = null) {
   const area = cv.contourArea(contour);
   if (!(minArea <= area && area <= maxArea)) return null;
+  if (tooHoley?.(area)) return null;
   const { center, size } = cv.minAreaRect(contour);
   const [rw, rh] = [size.width, size.height];
   if (Math.max(rw, rh) > MAX_ASPECT * Math.min(rw, rh) || area < MIN_FILL * rw * rh) return null;
@@ -226,10 +264,16 @@ function imageOrder(project) {
  *
  * {centers: 9 [x, y] riga per riga, cells: 9 poligoni di 4 punti da cui leggere il colore,
  *  outline: 4 punti del contorno, seen: per ogni casella se è vista davvero (false = ricostruita,
- *  es. coperta da un dito), complete: tutte viste}.
+ *  es. coperta da un dito), complete: tutte viste, kind: KIND_DARK o KIND_STICKER}.
  */
 export function detectFace(cv, frame) {
-  const fitted = fitLattice(findBlobs(cv, frame));
+  // Prima le caselle a interno scuro, poi, se non c'è una faccia, gli adesivi pieni del cubo classico.
+  let fitted = null;
+  let kind = null;
+  for (kind of [KIND_DARK, KIND_STICKER]) {
+    fitted = fitLattice(findBlobs(cv, frame, kind === KIND_STICKER));
+    if (fitted !== null) break;
+  }
   if (fitted === null) return null;
   const [lattice, imagePoints] = fitted;
   const source = cv.matFromArray(lattice.length, 1, cv.CV_64FC2, lattice.flat());
@@ -258,7 +302,7 @@ export function detectFace(cv, frame) {
     }
   }
   const outline = project([[-0.5, -0.5], [2.5, -0.5], [2.5, 2.5], [-0.5, 2.5]]);
-  return { centers, cells, outline, seen, complete: seen.every(Boolean) };
+  return { centers, cells, outline, seen, complete: seen.every(Boolean), kind };
 }
 
 /**
@@ -269,6 +313,7 @@ export function detectFace(cv, frame) {
 export function readFace(cv, rgb, lab, face) {
   const { rows: height, cols: width } = rgb;
   const clip = (x, low, high) => Math.min(Math.max(x, low), high);
+  const saturatedFraction = face.kind === KIND_STICKER ? STICKER_SATURATED_FRACTION : SATURATED_FRACTION;
   const labs = [];
   const rgbs = [];
   for (const cell of face.cells) {
@@ -300,7 +345,7 @@ export function readFace(cv, rgb, lab, face) {
       rgbs.push([0, 0, 0]);
       continue;
     }
-    const keep = colorMask(labPixels);
+    const keep = colorMask(labPixels, null, saturatedFraction);
     labs.push(median(labPixels.filter((_, n) => keep[n])));
     rgbs.push(median(rgbPixels.filter((_, n) => keep[n])).map(Math.trunc));
   }

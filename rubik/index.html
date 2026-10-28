@@ -61,7 +61,7 @@
       <li data-i18n="intro.step2">Mostra una faccia alla volta e tienila ferma finché il riquadro diventa verde.</li>
       <li data-i18n="intro.step3">Dopo la sesta faccia segui le mosse, dal tuo punto di vista.</li>
     </ol>
-    <p class="rubik__note" data-i18n="intro.note">Per ora è tarato sul mio cubo: caselle con l'interno scuro e il bordo colorato. Un cubo classico a tinta piena potrebbe non essere riconosciuto.</p>
+    <p class="rubik__note" data-i18n="intro.note">Funziona con i cubi con gli adesivi su plastica nera, come il Rubik's originale, e con quelli come il mio, con l'interno delle caselle scuro. I cubi senza adesivi (stickerless) per ora non vengono riconosciuti.</p>
     <p class="rubik__privacy" data-i18n="intro.privacy">Le immagini restano sul tuo dispositivo: niente viene inviato né salvato.</p>
     <div class="rubik__actions">
       <button type="button" class="btn btn--primary" id="startButton" data-i18n="intro.start">Avvia la fotocamera</button>
@@ -145,7 +145,7 @@
   <section class="rubik__about">
     <h2 class="rubik__subtitle" data-i18n="about.title">Come funziona</h2>
     <ul class="rubik__list">
-      <li data-i18n="about.vision">Visione: ogni casella ha l'interno scuro, quindi la pagina cerca macchie scure quasi quadrate disposte a griglia 3×3 e ne legge il colore dai pixel più saturi. Il riferimento sono i centri del cubo stesso, così si adatta alla luce della stanza.</li>
+      <li data-i18n="about.vision">Visione: la pagina cerca macchie quasi quadrate disposte a griglia 3×3: gli interni scuri delle caselle o, nel cubo classico, gli adesivi chiari separati dal nero. Il colore di ogni casella si legge dai suoi pixel; il riferimento sono i centri del cubo stesso, così si adatta alla luce della stanza.</li>
       <li data-i18n="about.state">Stato: le facce si riconoscono dal centro; la rotazione di ognuna è l'unica che rende il cubo risolvibile.</li>
       <li data-i18n="about.solver">Soluzione: algoritmo two-phase di Kociemba, al massimo 22 mosse, calcolato nel browser.</li>
       <li data-i18n="about.origin">È una funzione di doppelbot, il mio gemello digitale: un robot Unitree G1 simulato in ROS 2 che imita i movimenti visti dalla webcam.</li>

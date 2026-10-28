@@ -16,6 +16,9 @@ import { FACES, checkSolvable } from "./cube.js";
 
 export const CHROMA_MIN = 22.0; // saturazione minima di un pixel colorato
 export const SATURATED_FRACTION = 0.13; // casella colorata se almeno il 13% dei pixel è saturo (sotto: bianca)
+// Adesivo pieno (cubo classico): colorato solo se lo è la maggior parte dei pixel. Il centro bianco
+// con il logo ha lettere colorate, ma è bianco quasi tutto.
+export const STICKER_SATURATED_FRACTION = 0.5;
 export const CHROMA_KEEP = 0.7; // pixel tenuti: saturazione almeno al 70% della più alta della casella
 export const WHITE_BAND = [85, 98]; // per il bianco: percentili di luminosità tenuti (sopra sono riflessi)
 export const L_WEIGHT = 0.5; // la luminosità conta meno della tinta: ombre e riflessi la fanno variare molto
@@ -59,12 +62,13 @@ export function median(vectors) {
  * Maschera dei pixel (lista di [L, a, b]) che mostrano il colore dell'adesivo.
  *
  * Adesivo colorato: i pixel più saturi. Adesivo bianco: i pixel più chiari, esclusi i riflessi.
- * `white` null = decide la casella (bianca se ha pochi pixel saturi); true/false = colore noto.
+ * `white` null = decide la casella (bianca se meno di `saturatedFraction` dei pixel è saturo);
+ * true/false = colore noto.
  */
-export function colorMask(labPixels, white = null) {
+export function colorMask(labPixels, white = null, saturatedFraction = SATURATED_FRACTION) {
   const chroma = labPixels.map(([, a, b]) => Math.hypot(a - 128, b - 128));
   if (white === null) {
-    white = chroma.filter((c) => c >= CHROMA_MIN).length / chroma.length < SATURATED_FRACTION;
+    white = chroma.filter((c) => c >= CHROMA_MIN).length / chroma.length < saturatedFraction;
   }
   let mask;
   if (!white) {

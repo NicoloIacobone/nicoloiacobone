@@ -20,7 +20,7 @@ const I18N = {
     "intro.step2": "Mostra una faccia alla volta e tienila ferma finché il riquadro diventa verde.",
     "intro.step3": "Dopo la sesta faccia segui le mosse, dal tuo punto di vista.",
     "intro.note":
-      "Per ora è tarato sul mio cubo: caselle con l'interno scuro e il bordo colorato. Un cubo classico a tinta piena potrebbe non essere riconosciuto.",
+      "Funziona con i cubi con gli adesivi su plastica nera, come il Rubik's originale, e con quelli come il mio, con l'interno delle caselle scuro. I cubi senza adesivi (stickerless) per ora non vengono riconosciuti.",
     "intro.privacy": "Le immagini restano sul tuo dispositivo: niente viene inviato né salvato.",
     "intro.start": "Avvia la fotocamera",
     "load.opencv": "Caricamento di OpenCV (circa 4 MB)…",
@@ -83,7 +83,7 @@ const I18N = {
     "list.and": "e",
     "about.title": "Come funziona",
     "about.vision":
-      "Visione: ogni casella ha l'interno scuro, quindi la pagina cerca macchie scure quasi quadrate disposte a griglia 3×3 e ne legge il colore dai pixel più saturi. Il riferimento sono i centri del cubo stesso, così si adatta alla luce della stanza.",
+      "Visione: la pagina cerca macchie quasi quadrate disposte a griglia 3×3: gli interni scuri delle caselle o, nel cubo classico, gli adesivi chiari separati dal nero. Il colore di ogni casella si legge dai suoi pixel; il riferimento sono i centri del cubo stesso, così si adatta alla luce della stanza.",
     "about.state":
       "Stato: le facce si riconoscono dal centro; la rotazione di ognuna è l'unica che rende il cubo risolvibile.",
     "about.solver": "Soluzione: algoritmo two-phase di Kociemba, al massimo 22 mosse, calcolato nel browser.",
@@ -107,7 +107,7 @@ const I18N = {
     "intro.step2": "Show one face at a time and hold it still until the frame turns green.",
     "intro.step3": "After the sixth face, follow the moves from your own point of view.",
     "intro.note":
-      "For now it is tuned to my cube: stickers with a dark centre and a coloured border. A classic solid-colour cube may not be recognised.",
+      "It works with cubes that have stickers on black plastic, like the original Rubik's, and with cubes like mine, whose squares have a dark centre. Stickerless cubes are not recognised yet.",
     "intro.privacy": "Images stay on your device: nothing is sent or stored.",
     "intro.start": "Start the camera",
     "load.opencv": "Loading OpenCV (about 4 MB)…",
@@ -170,7 +170,7 @@ const I18N = {
     "list.and": "and",
     "about.title": "How it works",
     "about.vision":
-      "Vision: every sticker has a dark centre, so the page looks for dark, nearly square blobs arranged in a 3×3 grid and reads each colour from the most saturated pixels. The reference is the cube's own centres, so it adapts to the room's light.",
+      "Vision: the page looks for nearly square blobs arranged in a 3×3 grid: the dark centres of the squares or, on a classic cube, the bright stickers separated by black. Each colour is read from the square's own pixels; the reference is the cube's own centres, so it adapts to the room's light.",
     "about.state": "State: faces are recognised by their centre; each face's rotation is the only one that makes the cube solvable.",
     "about.solver": "Solution: Kociemba's two-phase algorithm, at most 22 moves, computed in the browser.",
     "about.origin":
