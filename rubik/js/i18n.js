@@ -20,7 +20,7 @@ const I18N = {
     "intro.step2": "Mostra una faccia alla volta e tienila ferma finché il riquadro diventa verde.",
     "intro.step3": "Dopo la sesta faccia segui le mosse, dal tuo punto di vista.",
     "intro.note":
-      "Funziona con i cubi con gli adesivi su plastica nera, come il Rubik's originale, e con quelli come il mio, con l'interno delle caselle scuro. I cubi senza adesivi (stickerless) per ora non vengono riconosciuti.",
+      "Funziona con i cubi con gli adesivi su plastica nera, come il Rubik's originale, con quelli come il mio, con l'interno delle caselle scuro, e con i cubi senza adesivi (stickerless).",
     "intro.privacy": "Le immagini restano sul tuo dispositivo: niente viene inviato né salvato.",
     "intro.start": "Avvia la fotocamera",
     "load.opencv": "Caricamento di OpenCV (circa 4 MB)…",
@@ -107,7 +107,7 @@ const I18N = {
     "intro.step2": "Show one face at a time and hold it still until the frame turns green.",
     "intro.step3": "After the sixth face, follow the moves from your own point of view.",
     "intro.note":
-      "It works with cubes that have stickers on black plastic, like the original Rubik's, and with cubes like mine, whose squares have a dark centre. Stickerless cubes are not recognised yet.",
+      "It works with cubes that have stickers on black plastic, like the original Rubik's, with cubes like mine, whose squares have a dark centre, and with stickerless cubes.",
     "intro.privacy": "Images stay on your device: nothing is sent or stored.",
     "intro.start": "Start the camera",
     "load.opencv": "Loading OpenCV (about 4 MB)…",

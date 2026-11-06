@@ -5,7 +5,7 @@
    nella lista giusta, salva, ricarica la pagina. Fine.
 
      lived   → paesi in cui hai VISSUTO   (arancione sulla mappa)
-     visited → paesi che hai VISITATO     (verde sulla mappa)
+     visited → paesi che hai VISITATO     (ciano sulla mappa)
 
    Un paese che compare in entrambe le liste viene disegnato come "vissuto":
    non serve toglierlo da "visited".
